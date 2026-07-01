@@ -1,0 +1,97 @@
+{
+  "schema": 1,
+  "packs": {
+    "cafe": {
+      "tier": "flavour",
+      "files": 7
+    },
+    "cafe-card": {
+      "tier": "common",
+      "files": 2
+    },
+    "casino-blackjack": {
+      "tier": "flavour",
+      "files": 27
+    },
+    "casino-blackjack-card": {
+      "tier": "common",
+      "files": 2
+    },
+    "casino-common": {
+      "tier": "common",
+      "files": 34
+    },
+    "casino-craps": {
+      "tier": "flavour",
+      "files": 7
+    },
+    "casino-craps-card": {
+      "tier": "common",
+      "files": 2
+    },
+    "casino-poker": {
+      "tier": "flavour",
+      "files": 21
+    },
+    "casino-poker-card": {
+      "tier": "common",
+      "files": 2
+    },
+    "casino-roulette": {
+      "tier": "flavour",
+      "files": 38
+    },
+    "casino-roulette-card": {
+      "tier": "common",
+      "files": 2
+    },
+    "casino-slots": {
+      "tier": "flavour",
+      "files": 6
+    },
+    "casino-slots-card": {
+      "tier": "common",
+      "files": 2
+    },
+    "common": {
+      "tier": "common",
+      "files": 5
+    },
+    "funfair": {
+      "tier": "flavour",
+      "files": 24
+    },
+    "funfair-card": {
+      "tier": "common",
+      "files": 2
+    },
+    "icf": {
+      "tier": "flavour",
+      "files": 11
+    },
+    "icf-card": {
+      "tier": "common",
+      "files": 2
+    },
+    "purist-common": {
+      "tier": "common",
+      "files": 15
+    },
+    "riviera": {
+      "tier": "flavour",
+      "files": 18
+    },
+    "riviera-card": {
+      "tier": "common",
+      "files": 2
+    },
+    "woodland": {
+      "tier": "flavour",
+      "files": 4
+    },
+    "woodland-card": {
+      "tier": "common",
+      "files": 2
+    }
+  }
+}

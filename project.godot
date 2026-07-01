@@ -1,0 +1,14 @@
+; Carrom CONTENT project — the source of truth for all games.
+; Builds the signed per-flavour content packs the engine downloads + mounts.
+; Holds ONLY game content under games/ (res://games/...); no engine code.
+config_version=5
+
+[application]
+config/name="Carrom Content"
+config/features=PackedStringArray("4.7")
+
+[importer_defaults]
+
+[rendering]
+textures/vram_compression/import_s3tc_bptc=true
+textures/default_filters/anisotropic_filtering_level=16

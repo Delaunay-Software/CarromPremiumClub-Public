@@ -1,0 +1,5 @@
+# Build + publish artifacts — never committed to the content repo
+dist/
+.godot/
+export_presets.cfg.*.bak
+*_priv.pem
