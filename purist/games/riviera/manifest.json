@@ -1,0 +1,38 @@
+{
+  "id": "riviera",
+  "title": "Riviera",
+  "tagline": "Relaxed cliff-top retreat",
+  "rule_set": "casual",
+  "accent": "#2E8FB5",
+  "board_size": "junior",
+  "turn_marker": { "scale": 2.0, "offset_y": -37 },
+  "environment": "beach",
+  "surface_material": "ivory",
+  "surface_roughness_scale": 0.2,
+  "frame_material": "rough_brown",
+  "frame_finish": "satin",
+  "corner_style": "rounded",
+  "corner_cap_mesh": "half_corner_cap.glb",
+  "corner_cap_material": "brass",
+  "corner_cap_material_scale": 0.15,
+  "corner_cap_material_normal": 1.0,
+  "chair_yaw": 180,
+  "coin_profile": "deluxe",
+  "coins": {
+    "white": "#0F6B6D",
+    "black": "#0B1F3B",
+    "queen": "#B22C2C",
+    "striker": "#1D4F63",
+    "bevel": "brass",
+    "finish": "polished",
+    "roughness": 0.3,
+    "metallic": 0.0
+  },
+  "markings": {
+    "line_color": "#0B1F3B",
+    "spot_color": "#976F28",
+    "pocket_rim_trim": "brass",
+    "board_edge_trim": "brass",
+    "pocket_cup_color": "#0B1F3B"
+  }
+}

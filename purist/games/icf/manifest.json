@@ -1,0 +1,18 @@
+{
+  "id": "icf",
+  "title": "ICF Rules",
+  "tagline": "Tournament play",
+  "rule_set": "icf",
+  "accent": "#4D8CFF",
+  "surface_material": "beech",
+  "frame_material": "dark",
+  "frame_finish": "piano_gloss",
+  "grunge": {
+    "board": { "patina": 0, "grime": 0, "powder": 1.0, "wear": 0 },
+    "table": { "patina": 0, "grime": 0, "powder": 0, "wear": 0 }
+  },
+  "markings": {
+    "line_color":       "#740005",
+    "spot_color": "#740005"
+  }
+}

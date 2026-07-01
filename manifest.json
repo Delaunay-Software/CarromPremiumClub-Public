@@ -1,0 +1,16 @@
+{
+  "id": "engine",
+  "table_height": 800,
+  "grunge": {
+    "coins": {
+      "wear": 0.35,"powder": 0.3,"grime":  0.1
+    },
+    "board": {
+      "patina": 2.0, "grime": 1.0, "powder": 1.0, "wear": 1.0,
+      "patina_min_color": "#4C4233", "patina_max_color": "#1F2929"
+    },
+    "table": {
+      "patina": 0.2, "grime": 0.2, "powder": 0.1, "wear": 0.2
+    }
+  }
+}

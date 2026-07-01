@@ -1,0 +1,59 @@
+{
+  "id": "craps",
+  "title": "Craps",
+  "tagline": "Roll the bones",
+  "_payout_note": "Same economy rules as slots \u2014 max 5x payout, common outcomes push (stake refund), rare wins. Hardways (matching dice) win; rare sums (3, 4, 9, 10, 11) push (refund stake); middle sums (5/6/7/8) forfeit to the house.",
+  "_rtp_note": "Calibrated RTP ~94.4% (house edge +5.6%). Win 6/36 (16.67%), push 12/36 (33.33%), forfeit 18/36 (50%). Max win multiplier 5x.",
+  "ring_count": 2,
+  "segment_count": 6,
+  "_icon_rotation_note": "Dice sit diamond-oriented (45\u00b0) so adjacent faces read as separate cubes rather than dominoes lined up along the ring.",
+  "icon_rotation_deg": 45,
+  "_icon_size_note": "Dice texture has a 10% transparent margin on each side (DieFaceFactory's BoxInsetRatio), so the icon mesh can extend past the segment by ~20% without the visible die body clipping. Bumping the fill factor to 1.18 gives a meatier-looking die without crowding the rim.",
+  "icon_size_fraction": 1.18,
+  "outer_segments": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6"
+  ],
+  "inner_segments": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6"
+  ],
+  "payout_patterns": [
+    {
+      "_note": "Hardways \u2014 matching dice. Snake-eyes (1+1) and boxcars (6+6) pay max-5x; middle hardways scale down by face proximity to the edges.",
+      "type": "n_of_a_kind",
+      "n": 2,
+      "awards": {
+        "1": 5,
+        "2": 2,
+        "3": 1,
+        "4": 1,
+        "5": 2,
+        "6": 5
+      }
+    },
+    {
+      "_note": "Easy-way sums (mixed dice). Rare sums (3/11 = 2/36, 4/10 = 3/36) push (stake refund). Middle sums (5/6/7/8/9) forfeit \u2014 that's the house edge.",
+      "type": "total_lookup",
+      "awards": {
+        "3": -1,
+        "4": -1,
+        "9": -1,
+        "10": -1,
+        "11": -1
+      }
+    }
+  ],
+  "icons_dir": "assets/images/",
+  "outer_spin_secs": 3.0,
+  "inner_spin_secs": 4.0,
+  "ghost_hold_secs": 0.6
+}

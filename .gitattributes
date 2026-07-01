@@ -1,0 +1,17 @@
+# index.json hashes every file by exact byte length + sha256, and ContentSync
+# verifies those hashes on download. Force LF on text content so the hashes are
+# byte-identical across Windows working trees, Linux CI, and GitHub raw/Release
+# blobs — core.autocrlf=true otherwise smudges LF→CRLF locally and makes the
+# freshness/verification non-deterministic per platform. (Moved here from the
+# engine repo in Phase 4 — see docs/CONTENT-PCK-MIGRATION.md.)
+*.import text eol=lf
+*.json   text eol=lf
+*.bbcode text eol=lf
+*.svg    text eol=lf
+*.md     text eol=lf
+# Binary content — never convert (protects the content hashes).
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.mp3  binary
+*.glb  binary

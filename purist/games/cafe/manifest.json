@@ -1,0 +1,43 @@
+{
+  "id": "rainy_day_cafe",
+  "title": "Rainy Day Cafe",
+  "tagline": "Coffee, conversation, carrom",
+  "rule_set": "casual",
+  "accent": "#C88A3D",
+  "board_size": "junior",
+  "environment": "cafe",
+  "surface_material": "beech",
+  "surface_roughness_scale": 0.72,
+  "frame_material": "mahogany",
+  "table_material": "mahogany",
+  "frame_finish": "satin",
+  "corner_style": "rounded",
+  "corner_cap_mesh": "full_corner_cap.glb",
+  "corner_cap_material": "leather",
+  "corner_cap_material_scale": 0.05,
+  "corner_cap_material_normal": 2.0,
+
+  "table_height": 780,
+  "chair_yaw": 180,
+  "leg_material": "mahogany",
+
+  "coin_profile": "deluxe",
+  "coins": {
+    "white": "#F3E6C8",
+    "black": "#1B1712",
+    "queen": "#B8322A",
+    "striker": "#6B3E1E",
+    "bevel": "brass",
+    "finish": "polished",
+    "roughness": 0.34,
+    "metallic": 0.0
+  },
+
+  "markings": {
+    "line_color": "#5A2F16",
+    "spot_color": "#B8322A",
+    "pocket_rim_trim": "brass",
+    "board_edge_trim": "#A76D2D",
+    "pocket_cup_color": "#2A1710"
+  }
+}

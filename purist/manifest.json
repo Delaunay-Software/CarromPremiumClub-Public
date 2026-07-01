@@ -1,0 +1,15 @@
+{
+  "id": "purist",
+  "title": "Purist",
+  "tagline": "Pure carrom . True passion",
+  "card_texture": "res://assets/textures/mahogany/Color.jpg",
+  "coins": {
+    "white":      "#FFFFFF",
+    "black":      "#FFFFFF",
+    "queen":      "#FFFFFF",
+    "striker":    "#FFFFFF",
+    "white_material": "rough_white",
+    "black_material": "rough_brown",
+    "queen_material": "rough_red"
+  }
+}

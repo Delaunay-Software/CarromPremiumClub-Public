@@ -1,0 +1,15 @@
+{
+  "id": "casual",
+  "title": "Woodland Retreat",
+  "tagline": "Relaxed rules",
+  "rule_set": "casual",
+  "accent": "#8CC772",
+  "surface_material": "beech",
+  "frame_material_id": "mahogany",
+  "frame_finish": "piano_gloss",
+  "corner_style": "rounded",
+  "markings": {
+    "line_color": "#740005",
+    "spot_color": "#740005"
+  }
+}
