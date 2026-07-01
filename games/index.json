@@ -1431,7 +1431,7 @@
     },
     {
       "id": "purist",
-      "version": "ba84054cb7b3",
+      "version": "ecb1c002ee5f",
       "files": [
         {
           "path": "purist/assets/images/icon.svg",
@@ -1645,8 +1645,8 @@
         },
         {
           "path": "purist/games/cafe/manifest.json",
-          "sha256": "5f154a4a807e844b0a92d68af7fe17c1178580f45e4949e0111c5f0662e923fd",
-          "bytes": 1061
+          "sha256": "2b9ed67a70c72a8c540a790d1929d140c8b39c512a0057090d9aabe8444dc6fe",
+          "bytes": 1062
         },
         {
           "path": "purist/games/funfair/assets/audio/ambient/conversation.mp3",
@@ -2045,8 +2045,8 @@
         },
         {
           "path": "purist/games/riviera/assets/audio/audience/idle/bird1.mp3.import",
-          "sha256": "c8538a0c2dd743919dd1ef80f30c86d88986bd31f9f7a2eef060c8a5f7b8e74a",
-          "bytes": 392
+          "sha256": "f071f72b2a5fd6bfac2730e4937ef656457162852d7e15640ef07ee74a265773",
+          "bytes": 398
         },
         {
           "path": "purist/games/riviera/assets/audio/audience/idle/bird2.mp3",
@@ -2055,8 +2055,8 @@
         },
         {
           "path": "purist/games/riviera/assets/audio/audience/idle/bird2.mp3.import",
-          "sha256": "f91a7e0d5e5a121eb6cec4aa65ffe20f86ccdca90d6da7964dcd11fb9451a66b",
-          "bytes": 392
+          "sha256": "40c773358a5830809ac75d685a6f6809c20978d0f22a0dd1ab0a0af18c88cf7a",
+          "bytes": 398
         },
         {
           "path": "purist/games/riviera/assets/audio/audience/idle/bird3.mp3",
@@ -2065,8 +2065,8 @@
         },
         {
           "path": "purist/games/riviera/assets/audio/audience/idle/bird3.mp3.import",
-          "sha256": "8a2fd425f963518e6a8a915dec539cc634cbd58b5106db0ab93fb5ecd9839056",
-          "bytes": 391
+          "sha256": "21ecb7e6b4caa23b665e111c09915f03c57f3fe75bc8414596e2fa38e32d8266",
+          "bytes": 397
         },
         {
           "path": "purist/games/riviera/assets/audio/audience/idle/bird4.mp3",
@@ -2075,8 +2075,8 @@
         },
         {
           "path": "purist/games/riviera/assets/audio/audience/idle/bird4.mp3.import",
-          "sha256": "f23fe8c37e310e7bb0885b3c0103795ce924e2b511dbeebe09e36de0e5017193",
-          "bytes": 392
+          "sha256": "d37dadfec6e39e70f8d928a4493fb19cad856f87eb8796b07e5ce400ec6eed24",
+          "bytes": 398
         },
         {
           "path": "purist/games/riviera/assets/audio/foul/foul_1.mp3",

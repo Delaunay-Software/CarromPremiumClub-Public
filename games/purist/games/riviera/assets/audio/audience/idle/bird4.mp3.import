@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://da6y7powh6qab"
-path="res://.godot/imported/bird4.mp3-f5137cb4e16952e26d94646c33761510.mp3str"
+path="res://.godot/imported/bird4.mp3-6ecefc1dd161bacc73514da90f7878cc.mp3str"
 
 [deps]
 
-source_file="res://games/purist/games/riviera/assets/audio/ambient/bird4.mp3"
-dest_files=["res://.godot/imported/bird4.mp3-f5137cb4e16952e26d94646c33761510.mp3str"]
+source_file="res://games/purist/games/riviera/assets/audio/audience/idle/bird4.mp3"
+dest_files=["res://.godot/imported/bird4.mp3-6ecefc1dd161bacc73514da90f7878cc.mp3str"]
 
 [params]
 
