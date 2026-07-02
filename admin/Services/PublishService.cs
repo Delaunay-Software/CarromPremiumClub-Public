@@ -23,11 +23,40 @@ public sealed class PublishService
         return new Preflight(problems.Count == 0, problems);
     }
 
-    /// <summary>Rebuild + sign every pack into dist/. Uses --skip-gen when the pack
+    // Packed text types (mirrors .gitattributes `text eol=lf`). Packs embed these
+    // files' raw bytes, so CRLF in the working tree would be signed as CRLF while git
+    // stores LF — breaking deterministic hashing. Normalise before every sign.
+    private static readonly string[] TextExts = { ".json", ".import", ".bbcode", ".svg", ".md" };
+
+    /// <summary>Strip CR bytes from every packed text file under games/ so the signed
+    /// packs are byte-identical to the LF-normalised git source. Byte-level (0x0D
+    /// only ever appears as CR in UTF-8, so this is safe for multibyte + BOM) and
+    /// idempotent — untouched files aren't rewritten. Returns the count changed.</summary>
+    public int NormalizeContentLineEndings(Action<string> onLine)
+    {
+        int changed = 0;
+        foreach (var f in Directory.EnumerateFiles(_repo.GamesRoot, "*", SearchOption.AllDirectories))
+        {
+            if (!TextExts.Contains(Path.GetExtension(f).ToLowerInvariant())) continue;
+            var bytes = File.ReadAllBytes(f);
+            if (Array.IndexOf(bytes, (byte)'\r') < 0) continue;
+            File.WriteAllBytes(f, bytes.Where(b => b != (byte)'\r').ToArray());
+            onLine($"  LF {Path.GetRelativePath(_repo.RepoRoot, f).Replace('\\', '/')}");
+            changed++;
+        }
+        return changed;
+    }
+
+    /// <summary>Rebuild + sign every pack into dist/. Normalises CRLF→LF on packed
+    /// text FIRST (the signature must cover LF content). Uses --skip-gen when the pack
     /// file-lists are unchanged (a manifest value edit), so the tracked
     /// export_presets.cfg isn't rewritten.</summary>
     public Task<ProcessResult> BuildAndSignAsync(bool skipGen, Action<string> onLine, CancellationToken ct = default)
     {
+        onLine("── Normalize line endings (CRLF→LF) ──");
+        var n = NormalizeContentLineEndings(onLine);
+        onLine(n == 0 ? "  already LF" : $"  normalized {n} file(s)");
+
         var args = new List<string>
         {
             _repo.BuildAllScript,
