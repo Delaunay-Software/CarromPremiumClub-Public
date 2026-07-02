@@ -1,0 +1,324 @@
+@using System.Text.Json
+@using System.Text.Json.Nodes
+@using CarromContentAdmin.Services
+@inject ChoicesService Choices
+
+@* One manifest field, rendered with a type-appropriate editor bound to known ranges:
+   enum -> dropdown, bool -> toggle, number -> slider+box, colour -> HSL (hue/darkness)
+   with swatch, texture-set -> known-set dropdown, asset path -> file picker + preview,
+   object -> nested recurse, array -> validated JSON. Reports edits via OnChanged so the
+   cockpit rolls dirty state up to Section and Game. *@
+
+<div class="rounded-md border @(Dirty ? "border-accent/70" : "border-edge/60") bg-[#12151c] p-3">
+    <div class="flex items-baseline gap-2">
+        @if (Dirty)
+        {
+            <span class="w-1.5 h-1.5 rounded-full bg-accent" title="edited (unsaved)"></span>
+        }
+        <label class="text-sm font-medium text-slate-200">@SchemaService.Label(Prop.Key)</label>
+        <code class="text-[11px] text-slate-500">@Prop.Key</code>
+        <span class="text-[10px] text-slate-600 uppercase">@TypeBadge</span>
+        @if (IsSet)
+        {
+            <button class="ml-auto text-[11px] text-slate-500 hover:text-red-300" @onclick="Clear">clear</button>
+        }
+        else
+        {
+            <span class="ml-auto text-[10px] text-slate-600 italic">@(Prop.DefaultHint is { } d ? $"unset — default: {d}" : "unset — inherits")</span>
+        }
+    </div>
+    @if (!string.IsNullOrEmpty(Prop.Description))
+    {
+        <p class="text-xs text-slate-500 mt-1 leading-snug">@Prop.Description</p>
+    }
+    <div class="mt-2">
+        @Body
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public SchemaNode Prop { get; set; } = default!;
+    [Parameter, EditorRequired] public JsonObject Model { get; set; } = default!;
+    [Parameter] public IReadOnlyList<AssetEntry> Assets { get; set; } = Array.Empty<AssetEntry>();
+    [Parameter] public string GamesRelDir { get; set; } = "";   // node dir relative to games/, for asset preview URLs
+    [Parameter] public EventCallback<string> OnDirty { get; set; }   // fires with the top-level key touched
+    [Parameter] public string TopKey { get; set; } = "";   // top-level manifest key this field rolls up to
+    [Parameter] public int Depth { get; set; }
+
+    private string Key => Prop.Key;
+    private bool IsSet => Model.ContainsKey(Key) && Model[Key] is not null;
+    private string TypeBadge => Prop.PrimaryType + (Prop.Nullable ? "?" : "");
+
+    private bool Dirty => false;   // field-level dot is driven by the cockpit via re-render; kept simple here
+
+    private const string Css = "w-full bg-panel border border-edge rounded px-2 py-1.5 text-sm text-slate-100 focus:outline-none focus:border-accent";
+
+    private async Task Changed()
+    {
+        if (OnDirty.HasDelegate) await OnDirty.InvokeAsync(string.IsNullOrEmpty(TopKey) ? Key : TopKey);
+    }
+
+    private string Str() => Model[Key]?.ToString() ?? "";
+
+    private async Task SetStr(string? v)
+    {
+        if (string.IsNullOrEmpty(v)) Model.Remove(Key);
+        else Model[Key] = JsonValue.Create(v);
+        await Changed();
+    }
+
+    private async Task Clear() { Model.Remove(Key); await Changed(); }
+
+    private RenderFragment Body => __builder =>
+    {
+        if (Prop.Enum is { Count: > 0 })
+        {
+            <select class="@Css" value="@Str()" @onchange="e => SetStr(e.Value?.ToString())">
+                <option value="">(unset — inherits)</option>
+                @foreach (var opt in Prop.Enum)
+                {
+                    <option value="@opt">@opt</option>
+                }
+            </select>
+        }
+        else if (Prop.IsBool)
+        {
+            <button type="button" @onclick="ToggleBool"
+                    class="inline-flex items-center gap-2 px-3 py-1.5 rounded border border-edge text-sm @(BoolVal == true ? "bg-accent/20 text-accent border-accent/50" : "text-slate-300")">
+                <span class="w-8 h-4 rounded-full relative transition @(BoolVal == true ? "bg-accent" : "bg-edge")">
+                    <span class="absolute top-0.5 w-3 h-3 rounded-full bg-white transition-all @(BoolVal == true ? "left-4" : "left-0.5")"></span>
+                </span>
+                @(BoolVal is null ? "unset" : BoolVal.Value ? "true" : "false")
+            </button>
+        }
+        else if (Prop.IsColor)
+        {
+            @ColorEditor
+        }
+        else if (Prop.IsTextureSet)
+        {
+            <select class="@Css" value="@Str()" @onchange="e => SetStr(e.Value?.ToString())">
+                <option value="">(unset — inherits)</option>
+                @foreach (var t in Choices.TextureSets())
+                {
+                    <option value="@t">@t</option>
+                }
+            </select>
+            <p class="text-[11px] text-slate-500 mt-1">known PBR texture set — retint via the sibling tint colour field</p>
+        }
+        else if (Prop.IsNumber)
+        {
+            @NumberEditor
+        }
+        else if (Prop.IsAssetPath)
+        {
+            @AssetEditor
+        }
+        else if (Prop.IsObject)
+        {
+            var child = EnsureChildObject();
+            <div class="pl-3 border-l-2 border-edge space-y-3">
+                @foreach (var sub in Prop.Properties.Values)
+                {
+                    <FieldEditor Prop="sub" Model="child" Assets="Assets" GamesRelDir="GamesRelDir"
+                                 OnDirty="OnDirty" TopKey="@(string.IsNullOrEmpty(TopKey) ? Key : TopKey)" Depth="Depth + 1" />
+                }
+            </div>
+        }
+        else if (Prop.IsArray)
+        {
+            <textarea class="@Css font-mono h-24" spellcheck="false" @onchange="e => SetJsonRaw(e.Value?.ToString())">@Raw()</textarea>
+            <p class="text-[11px] text-slate-500 mt-1">JSON array@(Prop.Items is { PrimaryType: var t } ? $" of {t}" : "")</p>
+        }
+        else
+        {
+            <input class="@Css" value="@Str()" @onchange="e => SetStr(e.Value?.ToString())" />
+        }
+    };
+
+    // ── bool ────────────────────────────────────────────────────────────────
+    private bool? BoolVal => Model[Key] is JsonValue v && v.TryGetValue<bool>(out var b) ? b : (bool?)null;
+    private async Task ToggleBool()
+    {
+        // cycle unset -> true -> false -> unset
+        var next = BoolVal switch { null => (bool?)true, true => false, false => null };
+        if (next is null) Model.Remove(Key); else Model[Key] = JsonValue.Create(next.Value);
+        await Changed();
+    }
+
+    // ── colour (HSL: hue + saturation + darkness) ────────────────────────────
+    private string HexOrDefault => IsSet && Str().StartsWith('#') ? Str() : "#808080";
+    private RenderFragment ColorEditor => __builder =>
+    {
+        var (h, s, l) = HexToHsl(HexOrDefault);
+        <div class="space-y-2">
+            <div class="flex items-center gap-2">
+                <span class="w-9 h-9 rounded border border-edge" style="background:@HexOrDefault"></span>
+                <input type="color" value="@HexOrDefault" @onchange="e => SetStr(e.Value?.ToString())"
+                       class="h-9 w-10 bg-panel border border-edge rounded" />
+                <input class="@Css font-mono" placeholder="#RRGGBB" value="@Str()" @onchange="e => SetStr(e.Value?.ToString())" />
+            </div>
+            <div class="grid grid-cols-[64px_1fr_40px] items-center gap-2 text-xs text-slate-400">
+                <span>Hue</span>
+                <input type="range" min="0" max="360" value="@h" @onchange="e => SetHsl(e.Value?.ToString(), null, null)" class="w-full" />
+                <span class="text-right">@h°</span>
+                <span>Saturation</span>
+                <input type="range" min="0" max="100" value="@s" @onchange="e => SetHsl(null, e.Value?.ToString(), null)" class="w-full" />
+                <span class="text-right">@s%</span>
+                <span>Darkness</span>
+                <input type="range" min="0" max="100" value="@(100 - l)" @onchange="e => SetHsl(null, null, e.Value?.ToString())" class="w-full" />
+                <span class="text-right">@(100 - l)%</span>
+            </div>
+        </div>
+    };
+    private async Task SetHsl(string? hue, string? sat, string? darkness)
+    {
+        var (h, s, l) = HexToHsl(HexOrDefault);
+        if (int.TryParse(hue, out var hv)) h = hv;
+        if (int.TryParse(sat, out var sv)) s = sv;
+        if (int.TryParse(darkness, out var dv)) l = 100 - dv;
+        await SetStr(HslToHex(h, s, l));
+    }
+
+    // ── number (slider when bounded, else box) ───────────────────────────────
+    private RenderFragment NumberEditor => __builder =>
+    {
+        if (Prop.Min is { } mn && Prop.Max is { } mx)
+        {
+            var step = (mx - mn) <= 5 ? "0.01" : "any";
+            <div class="flex items-center gap-3">
+                <input type="range" min="@mn" max="@mx" step="@step" value="@(IsSet ? Str() : mn.ToString())"
+                       @onchange="e => SetNum(e.Value?.ToString())" class="flex-1" />
+                <input type="number" class="w-24 bg-panel border border-edge rounded px-2 py-1 text-sm text-slate-100"
+                       min="@mn" max="@mx" step="@step" value="@Str()" @onchange="e => SetNum(e.Value?.ToString())" />
+            </div>
+            <p class="text-[11px] text-slate-500 mt-1">range @mn – @mx</p>
+        }
+        else
+        {
+            <input type="number" class="@Css" step="any" value="@Str()" @onchange="e => SetNum(e.Value?.ToString())" />
+        }
+    };
+    private async Task SetNum(string? v)
+    {
+        if (string.IsNullOrWhiteSpace(v)) { Model.Remove(Key); await Changed(); return; }
+        if (double.TryParse(v, System.Globalization.CultureInfo.InvariantCulture, out var d))
+            Model[Key] = d == Math.Floor(d) && !v.Contains('.') ? JsonValue.Create((long)d) : JsonValue.Create(d);
+        await Changed();
+    }
+
+    // ── asset path (picker + preview) ────────────────────────────────────────
+    private RenderFragment AssetEditor => __builder =>
+    {
+        var matches = Assets.Where(a => MatchesKind(a.RelPath)).Select(a => a.RelPath).ToList();
+        <div class="flex items-start gap-3">
+            <div class="flex-1">
+                <select class="@Css" value="@Str()" @onchange="e => SetStr(e.Value?.ToString())">
+                    <option value="">(unset — inherits)</option>
+                    @foreach (var a in matches)
+                    {
+                        <option value="@a">@a</option>
+                    }
+                    @if (IsSet && !matches.Contains(Str()))
+                    {
+                        <option value="@Str()">@Str() (external)</option>
+                    }
+                </select>
+                @if (IsSet && !Assets.Any(a => a.RelPath == Str()))
+                {
+                    <p class="text-[11px] text-amber-400 mt-1">not under this node's assets/ — upload it in the Assets section</p>
+                }
+            </div>
+            @if (IsSet && IsImage(Str()))
+            {
+                <img src="@AssetUrl(Str())" alt="preview" class="w-16 h-16 object-contain rounded border border-edge bg-[#0b0c10]" />
+            }
+        </div>
+    };
+
+    private bool MatchesKind(string rel)
+    {
+        var ext = Path.GetExtension(rel).ToLowerInvariant();
+        if (Key.EndsWith("_glb") || Key.EndsWith("_mesh")) return ext == ".glb";
+        if (Key.EndsWith("_png")) return ext == ".png";
+        if (Key is "poster" or "backdrop" or "card_texture" || Key.EndsWith("_image") || Key.EndsWith("_texture") || Key.EndsWith("_icon"))
+            return ext is ".png" or ".jpg" or ".jpeg" or ".webp" or ".svg";
+        return true;   // generic _path / _dir — show everything
+    }
+    private static bool IsImage(string rel)
+    {
+        var ext = Path.GetExtension(rel).ToLowerInvariant();
+        return ext is ".png" or ".jpg" or ".jpeg" or ".webp";
+    }
+    private string AssetUrl(string rel)
+    {
+        var full = string.IsNullOrEmpty(GamesRelDir) ? rel : $"{GamesRelDir}/{rel}";
+        return $"/asset/{Uri.EscapeDataString(full).Replace("%2F", "/")}";
+    }
+
+    // ── object / array plumbing ──────────────────────────────────────────────
+    private JsonObject EnsureChildObject()
+    {
+        if (Model[Key] is JsonObject existing) return existing;
+        var child = new JsonObject();
+        Model[Key] = child;
+        return child;
+    }
+    private string Raw() => Model[Key]?.ToJsonString(new JsonSerializerOptions { WriteIndented = true }) ?? "";
+    private async Task SetJsonRaw(string? v)
+    {
+        if (string.IsNullOrWhiteSpace(v)) { Model.Remove(Key); await Changed(); return; }
+        try { Model[Key] = JsonNode.Parse(v!); } catch { /* keep last good; validation surfaces on save */ }
+        await Changed();
+    }
+
+    // ── HSL <-> hex ───────────────────────────────────────────────────────────
+    private static (int h, int s, int l) HexToHsl(string hex)
+    {
+        if (!TryHex(hex, out var r, out var g, out var b)) return (0, 0, 50);
+        double rd = r / 255.0, gd = g / 255.0, bd = b / 255.0;
+        double max = Math.Max(rd, Math.Max(gd, bd)), min = Math.Min(rd, Math.Min(gd, bd));
+        double h = 0, s, l = (max + min) / 2;
+        double d = max - min;
+        if (d == 0) { h = 0; s = 0; }
+        else
+        {
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            if (max == rd) h = (gd - bd) / d + (gd < bd ? 6 : 0);
+            else if (max == gd) h = (bd - rd) / d + 2;
+            else h = (rd - gd) / d + 4;
+            h /= 6;
+        }
+        return ((int)Math.Round(h * 360), (int)Math.Round(s * 100), (int)Math.Round(l * 100));
+    }
+    private static string HslToHex(int hDeg, int sPct, int lPct)
+    {
+        double h = hDeg / 360.0, s = sPct / 100.0, l = lPct / 100.0;
+        double r, g, b;
+        if (s == 0) { r = g = b = l; }
+        else
+        {
+            double q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+            double p = 2 * l - q;
+            r = Hue(p, q, h + 1.0 / 3); g = Hue(p, q, h); b = Hue(p, q, h - 1.0 / 3);
+        }
+        return $"#{(int)Math.Round(r * 255):X2}{(int)Math.Round(g * 255):X2}{(int)Math.Round(b * 255):X2}";
+    }
+    private static double Hue(double p, double q, double t)
+    {
+        if (t < 0) t += 1; if (t > 1) t -= 1;
+        if (t < 1.0 / 6) return p + (q - p) * 6 * t;
+        if (t < 1.0 / 2) return q;
+        if (t < 2.0 / 3) return p + (q - p) * (2.0 / 3 - t) * 6;
+        return p;
+    }
+    private static bool TryHex(string hex, out int r, out int g, out int b)
+    {
+        r = g = b = 0;
+        hex = hex.TrimStart('#');
+        if (hex.Length != 6) return false;
+        return int.TryParse(hex[..2], System.Globalization.NumberStyles.HexNumber, null, out r)
+            && int.TryParse(hex[2..4], System.Globalization.NumberStyles.HexNumber, null, out g)
+            && int.TryParse(hex[4..6], System.Globalization.NumberStyles.HexNumber, null, out b);
+    }
+}

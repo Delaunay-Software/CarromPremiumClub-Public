@@ -4,6 +4,7 @@
 @inject PublishService Publisher
 @inject GitService Git
 @inject GitHubReleaseService Release
+@inject PackMap Packs
 
 <PageTitle>Sign &amp; Publish</PageTitle>
 
@@ -43,11 +44,40 @@
     }
 </section>
 
+<!-- Dirty packs -->
+<section class="mb-6 rounded-lg border border-edge bg-panel p-4">
+    <div class="flex items-center justify-between mb-2">
+        <h2 class="text-sm font-semibold text-slate-300 uppercase tracking-wide">Dirty packs</h2>
+        <button class="text-xs px-2 py-1 rounded border border-edge text-slate-300 hover:bg-edge" @onclick="RefreshDirty">Refresh</button>
+    </div>
+    @if (_dirtyPacks is null)
+    {
+        <p class="text-sm text-slate-500">Computing from git status…</p>
+    }
+    else if (_dirtyPacks.Count == 0)
+    {
+        <p class="text-sm text-emerald-300">No dirty packs — content is in sync with the last publish.</p>
+    }
+    else
+    {
+        <div class="flex flex-wrap gap-2">
+            @foreach (var p in _dirtyPacks)
+            {
+                <span class="text-xs font-mono px-2 py-1 rounded bg-accent/15 text-accent border border-accent/40">@p</span>
+            }
+        </div>
+        <p class="text-[11px] text-slate-500 mt-2">Derived from <code>git status</code> over games/ — publishing rebuilds + re-signs ONLY these packs and merges them into the existing signed index.</p>
+    }
+</section>
+
 <!-- Pipeline -->
 <section class="mb-6 rounded-lg border border-edge bg-panel p-4 space-y-4">
     <div class="flex flex-wrap items-center gap-3">
         <label class="flex items-center gap-2 text-sm text-slate-300">
-            <input type="checkbox" @bind="_skipGen" /> --skip-gen (manifest edits only)
+            <input type="checkbox" @bind="_dirtyOnly" /> dirty packs only
+        </label>
+        <label class="flex items-center gap-2 text-sm text-slate-300">
+            <input type="checkbox" @bind="_skipGen" /> --skip-gen (manifest value edits only; uncheck if assets added/removed)
         </label>
         <button class="px-3 py-2 text-sm rounded bg-accent text-ink font-medium disabled:opacity-40"
                 disabled="@_busy" @onclick="BuildSign">1 · Build &amp; Sign</button>
@@ -87,20 +117,30 @@
     private GitStatus? _status;
     private bool _busy;
     private bool _skipGen = true;
+    private bool _dirtyOnly = true;
     private string _commitMsg = "";
     private string _tag = "";
+    private IReadOnlyCollection<string>? _dirtyPacks;
     private readonly List<string> _log = new();
 
     protected override async Task OnInitializedAsync()
     {
         _tag = PublishService.DefaultTag(DateTimeOffset.Now);
         await Refresh();
+        await RefreshDirty();
     }
 
     private async Task Refresh()
     {
         try { _status = await Git.StatusAsync(); }
         catch (Exception e) { Log($"git status failed: {e.Message}"); }
+    }
+
+    private async Task RefreshDirty()
+    {
+        try { _dirtyPacks = await Packs.DirtyPacksAsync(); }
+        catch (Exception e) { Log($"dirty-pack scan failed: {e.Message}"); }
+        await InvokeAsync(StateHasChanged);
     }
 
     private void Log(string line)
@@ -113,10 +153,17 @@
     {
         var pre = Publisher.Check();
         if (!pre.Ok) { foreach (var p in pre.Problems) Log("⚠ " + p); return; }
+        IReadOnlyCollection<string>? only = null;
+        if (_dirtyOnly)
+        {
+            await RefreshDirty();
+            if (_dirtyPacks is { Count: 0 }) { Log("✓ nothing dirty — no packs to rebuild"); return; }
+            only = _dirtyPacks;
+        }
         await Run(async () =>
         {
-            Log("── Build & sign ──");
-            var r = await Publisher.BuildAndSignAsync(_skipGen, Log);
+            Log(only is null ? "── Build & sign (ALL packs) ──" : $"── Build & sign (dirty only: {string.Join(", ", only)}) ──");
+            var r = await Publisher.BuildAndSignAsync(_skipGen, only, Log);
             Log(r.Ok ? "✓ build + sign complete" : $"✗ exited {r.ExitCode}");
         });
     }

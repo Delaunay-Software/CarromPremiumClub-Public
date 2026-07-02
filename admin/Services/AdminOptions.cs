@@ -29,4 +29,10 @@ public sealed class AdminOptions
 
     /// <summary>GitHub repo (owner/name) the signed packs publish to as Release assets.</summary>
     public string ReleaseRepo { get; set; } = "Delaunay-Software/CarromPremiumClub-Public";
+
+    /// <summary>PbrTextureSetRegistry ids the engine seeds (its assets/textures/&lt;id&gt;/).
+    /// Used to populate texture-set dropdowns; any games-local assets/textures/ dirs are
+    /// unioned in at runtime. Edit here when the engine's texture set changes.</summary>
+    public string[] KnownTextureSets { get; set; } =
+        { "ash", "beech", "brass", "dark", "felt", "ivory", "leather", "mahogany", "marble", "rough", "teak" };
 }

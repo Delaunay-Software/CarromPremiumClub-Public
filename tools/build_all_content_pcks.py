@@ -46,6 +46,7 @@ def main():
     ap.add_argument("out")
     ap.add_argument("key")
     ap.add_argument("--skip-gen", action="store_true", help="use the existing presets, don't regenerate")
+    ap.add_argument("--only", default="", help="comma-separated pack ids to (re)build; others are kept from the existing signed index (dirty-only publish)")
     args = ap.parse_args()
 
     godot = os.environ.get("GODOT", "godot")
@@ -70,12 +71,33 @@ def main():
     packs = json.load(open(packs_json, encoding="utf-8"))["packs"]
     os.makedirs(out, exist_ok=True)
 
-    # 2. export + sign each pack. Guard export_presets.cfg (headless corrupts it).
+    # Targeted (dirty-only) build: rebuild just --only packs and MERGE them into the
+    # existing signed index so every other pack keeps its published version. Full build
+    # (no --only) rebuilds everything from a fresh index.
+    only = [p.strip() for p in args.only.split(",") if p.strip()]
+    idx_path_existing = os.path.join(out, "packs-index.json")
+    if only:
+        unknown = [p for p in only if p not in packs]
+        if unknown:
+            sys.exit(f"--only names unknown pack(s): {', '.join(unknown)}")
+        targets = sorted(only)
+        if os.path.isfile(idx_path_existing):
+            index = json.load(open(idx_path_existing, encoding="utf-8"))
+            index.setdefault("schema", 1)
+            index.setdefault("packs", {})
+        else:
+            print("no existing packs-index.json to merge into — building the FULL index", flush=True)
+            targets = sorted(packs)
+            index = {"schema": 1, "packs": {}}
+    else:
+        targets = sorted(packs)
+        index = {"schema": 1, "packs": {}}
+
+    # 2. export + sign each target pack. Guard export_presets.cfg (headless corrupts it).
     bak = cfg + ".prebuild.bak"
     shutil.copy(cfg, bak)
-    index = {"schema": 1, "packs": {}}
     try:
-        for pid in sorted(packs):
+        for pid in targets:
             pck = os.path.join(out, f"{pid}.pck")
             print(f"== exporting {pid} ==", flush=True)
             subprocess.run([godot, "--headless", "--path", project,
@@ -94,11 +116,19 @@ def main():
         f.write("\n")
     sign_detached(key, idx, idx + ".sig")
 
-    total = sum(os.path.getsize(os.path.join(out, f"{p}.pck")) for p in index["packs"])
-    print(f"\nbuilt {len(index['packs'])} packs, {total // (1024*1024)} MB total -> {out}")
+    def size_of(p):
+        f = os.path.join(out, f"{p}.pck")
+        return os.path.getsize(f) if os.path.isfile(f) else 0
+    if only:
+        print(f"\ntargeted build: (re)signed {len(targets)} pack(s), merged into {len(index['packs'])}-pack index -> {out}")
+        print(f"  rebuilt: {', '.join(targets)}")
+    else:
+        total = sum(size_of(p) for p in index["packs"])
+        print(f"\nbuilt {len(index['packs'])} packs, {total // (1024*1024)} MB total -> {out}")
     for pid in sorted(index["packs"]):
-        mb = os.path.getsize(os.path.join(out, f"{pid}.pck")) // (1024 * 1024)
-        print(f"  {pid:20s} {index['packs'][pid]['tier']:8s} {mb} MB  {index['packs'][pid]['version'][:12]}")
+        mb = size_of(pid) // (1024 * 1024)
+        mark = " *" if pid in targets else ""
+        print(f"  {pid:20s} {index['packs'][pid]['tier']:8s} {mb} MB  {index['packs'][pid]['version'][:12]}{mark}")
     print("Upload every <out>/*.pck, *.pck.sig, packs-index.json + .sig as GitHub Release assets.")
 
 

@@ -47,11 +47,14 @@ public sealed class PublishService
         return changed;
     }
 
-    /// <summary>Rebuild + sign every pack into dist/. Normalises CRLF→LF on packed
-    /// text FIRST (the signature must cover LF content). Uses --skip-gen when the pack
+    /// <summary>Rebuild + sign packs into dist/. Normalises CRLF→LF on packed text
+    /// FIRST (the signature must cover LF content). Uses --skip-gen when the pack
     /// file-lists are unchanged (a manifest value edit), so the tracked
-    /// export_presets.cfg isn't rewritten.</summary>
-    public Task<ProcessResult> BuildAndSignAsync(bool skipGen, Action<string> onLine, CancellationToken ct = default)
+    /// export_presets.cfg isn't rewritten. When <paramref name="onlyPacks"/> is
+    /// non-empty, ONLY those packs are (re)built + signed and merged into the existing
+    /// signed index (dirty-only publish) — every other pack keeps its published version.</summary>
+    public Task<ProcessResult> BuildAndSignAsync(bool skipGen, IReadOnlyCollection<string>? onlyPacks,
+        Action<string> onLine, CancellationToken ct = default)
     {
         onLine("── Normalize line endings (CRLF→LF) ──");
         var n = NormalizeContentLineEndings(onLine);
@@ -65,9 +68,11 @@ public sealed class PublishService
             _repo.SigningKey,
         };
         if (skipGen) args.Add("--skip-gen");
+        var only = onlyPacks is { Count: > 0 } ? string.Join(",", onlyPacks) : "";
+        if (only.Length > 0) { args.Add("--only"); args.Add(only); }
 
         var env = new Dictionary<string, string> { ["GODOT"] = _repo.Godot };
-        onLine($"$ {_repo.Python} tools/build_all_content_pcks.py {(skipGen ? "--skip-gen" : "")}");
+        onLine($"$ {_repo.Python} tools/build_all_content_pcks.py {(skipGen ? "--skip-gen " : "")}{(only.Length > 0 ? $"--only {only}" : "(all packs)")}");
         return _proc.RunAsync(_repo.Python, args, _repo.RepoRoot, env, onLine, ct);
     }
 
