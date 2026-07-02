@@ -6,7 +6,6 @@
   "accent": "#EB2E38",
   "card_color": "#5C1A24",
   "currency": "tokens",
-  "leaderboard_id": "casino",
   "completionist_achievement": "casino_completionist",
   "environment": "casino",
   "reflection_floor": "#8C6B3F",
@@ -71,12 +70,10 @@
   "bonus_provider": "casino",
   "economy": "casino",
   "board_decorator": "casino",
-  "_mechanic_defaults_note": "Keys inherited by every child game manifest under games/. Child manifests override per-key (no removal). Lifted: type/presentation/icon_passthrough_color/bake_icons_into_wedge \u2014 all five casino mini-games declare them identically. Casino's rotor sits under a smoked glass cap (recessed cabinet look); flavours that want the open mechanical rotor at the surface override presentation=\"mechanical\" in their own manifest.",
+  "_mechanic_defaults_note": "Keys inherited by every child game manifest under games/. Child manifests override per-key (no removal). Lifted: type/presentation \u2014 all five casino mini-games declare them identically. icon_passthrough_color + bake_icons_into_wedge now default true in the engine (RotorMechanic), so dropped here. Casino's rotor sits under a smoked glass cap (recessed cabinet look); flavours that want the open mechanical rotor at the surface override presentation=\"mechanical\" in their own manifest.",
   "mechanic_defaults": {
     "type": "rotor",
     "presentation": "glass_covered",
-    "icon_passthrough_color": true,
-    "bake_icons_into_wedge": true,
     "_well_radius_fraction_note": "Casino's rotor is the WHOLE table \u2014 1.665\u00d7 the outer-circle radius. Other flavours that don't declare this default to the centre-rose marking size (encloses the coin pack).",
     "well_radius_fraction": 1.665
   },
