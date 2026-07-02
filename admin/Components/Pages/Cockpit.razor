@@ -274,13 +274,14 @@ else
     {
         var sec = _sections.FirstOrDefault(s => s.Id == _sectionId);
         if (sec is null || _working is null) return;
+        var original = Edits.OriginalObject(_active!);
 
         if (sec.Id == "_basics")
         {
             <div class="space-y-3">
                 @foreach (var f in sec.Fields)
                 {
-                    <FieldEditor Prop="f" Model="_working" Assets="_assets" GamesRelDir="@GamesRel"
+                    <FieldEditor Prop="f" Model="_working" Original="original" Assets="_assets" GamesRelDir="@GamesRel"
                                  OnDirty="OnFieldDirty" TopKey="@f.Key" />
                 }
             </div>
@@ -290,6 +291,7 @@ else
             // A single top-level object section — edit its child properties directly.
             var objField = sec.Fields[0];
             var child = EnsureChild(sec.Keys[0]);
+            var childOrig = original?[sec.Keys[0]] as JsonObject;
             <div class="flex items-center justify-between mb-2">
                 <p class="text-xs text-slate-500">@objField.Description</p>
                 @if (_working.ContainsKey(sec.Keys[0]))
@@ -300,7 +302,7 @@ else
             <div class="space-y-3">
                 @foreach (var sub in objField.Properties.Values)
                 {
-                    <FieldEditor Prop="sub" Model="child" Assets="_assets" GamesRelDir="@GamesRel"
+                    <FieldEditor Prop="sub" Model="child" Original="childOrig" Assets="_assets" GamesRelDir="@GamesRel"
                                  OnDirty="OnFieldDirty" TopKey="@sec.Keys[0]" />
                 }
             </div>

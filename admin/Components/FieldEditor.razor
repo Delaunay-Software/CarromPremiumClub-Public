@@ -39,6 +39,7 @@
 @code {
     [Parameter, EditorRequired] public SchemaNode Prop { get; set; } = default!;
     [Parameter, EditorRequired] public JsonObject Model { get; set; } = default!;
+    [Parameter] public JsonObject? Original { get; set; }   // on-disk snapshot at this level, for the per-field dirty dot
     [Parameter] public IReadOnlyList<AssetEntry> Assets { get; set; } = Array.Empty<AssetEntry>();
     [Parameter] public string GamesRelDir { get; set; } = "";   // node dir relative to games/, for asset preview URLs
     [Parameter] public EventCallback<string> OnDirty { get; set; }   // fires with the top-level key touched
@@ -49,7 +50,9 @@
     private bool IsSet => Model.ContainsKey(Key) && Model[Key] is not null;
     private string TypeBadge => Prop.PrimaryType + (Prop.Nullable ? "?" : "");
 
-    private bool Dirty => false;   // field-level dot is driven by the cockpit via re-render; kept simple here
+    // Per-field dirty = this field's current value differs from the on-disk snapshot
+    // at the same path (key-order-independent). Original is null before first load.
+    private bool Dirty => Original is not null && !EditSession.ValueEquals(Model[Key], Original[Key]);
 
     private const string Css = "w-full bg-panel border border-edge rounded px-2 py-1.5 text-sm text-slate-100 focus:outline-none focus:border-accent";
 
@@ -114,16 +117,24 @@
         {
             @AssetEditor
         }
-        else if (Prop.IsObject)
+        else if (Prop.IsObject && Prop.Properties.Count > 0)
         {
             var child = EnsureChildObject();
+            var childOrig = Original?[Key] as JsonObject;
             <div class="pl-3 border-l-2 border-edge space-y-3">
                 @foreach (var sub in Prop.Properties.Values)
                 {
-                    <FieldEditor Prop="sub" Model="child" Assets="Assets" GamesRelDir="GamesRelDir"
+                    <FieldEditor Prop="sub" Model="child" Original="childOrig" Assets="Assets" GamesRelDir="GamesRelDir"
                                  OnDirty="OnDirty" TopKey="@(string.IsNullOrEmpty(TopKey) ? Key : TopKey)" Depth="Depth + 1" />
                 }
             </div>
+        }
+        else if (Prop.IsObject)
+        {
+            // Free-form / additionalProperties object (no declared properties) — no typed
+            // sub-fields to render, so edit it as validated raw JSON rather than an empty box.
+            <textarea class="@Css font-mono h-24" spellcheck="false" @onchange="e => SetJsonRaw(e.Value?.ToString())">@Raw()</textarea>
+            <p class="text-[11px] text-slate-500 mt-1">free-form object (JSON)</p>
         }
         else if (Prop.IsArray)
         {
@@ -210,31 +221,56 @@
     // ── asset path (picker + preview) ────────────────────────────────────────
     private RenderFragment AssetEditor => __builder =>
     {
-        var matches = Assets.Where(a => MatchesKind(a.RelPath)).Select(a => a.RelPath).ToList();
+        // Value written is the CASCADE name the engine's FlavourPath expects (bare
+        // "poster.png", not "assets/images/poster.png") so the manifest resolves and
+        // diffs stay minimal. Options show the cascade name; the on-disk rel is kept
+        // for the preview URL. External/parent-shared values pass through verbatim.
+        var matches = Assets.Where(a => MatchesKind(a.RelPath)).ToList();
+        var cur = Str();
+        var known = matches.Select(a => CascadeName(a.RelPath)).ToHashSet();
         <div class="flex items-start gap-3">
             <div class="flex-1">
-                <select class="@Css" value="@Str()" @onchange="e => SetStr(e.Value?.ToString())">
+                <select class="@Css" value="@cur" @onchange="e => SetStr(e.Value?.ToString())">
                     <option value="">(unset — inherits)</option>
                     @foreach (var a in matches)
                     {
-                        <option value="@a">@a</option>
+                        var name = CascadeName(a.RelPath);
+                        <option value="@name">@name</option>
                     }
-                    @if (IsSet && !matches.Contains(Str()))
+                    @if (IsSet && !known.Contains(cur))
                     {
-                        <option value="@Str()">@Str() (external)</option>
+                        <option value="@cur">@cur (external / shared)</option>
                     }
                 </select>
-                @if (IsSet && !Assets.Any(a => a.RelPath == Str()))
+                @if (IsSet && !known.Contains(cur) && ResolveRel(cur) is null)
                 {
-                    <p class="text-[11px] text-amber-400 mt-1">not under this node's assets/ — upload it in the Assets section</p>
+                    <p class="text-[11px] text-amber-400 mt-1">not under this node's assets/ — a parent-shared asset, or upload it in the Assets section</p>
                 }
             </div>
-            @if (IsSet && IsImage(Str()))
+            @if (IsSet && ResolveRel(cur) is { } rel && IsImage(rel))
             {
-                <img src="@AssetUrl(Str())" alt="preview" class="w-16 h-16 object-contain rounded border border-edge bg-[#0b0c10]" />
+                <img src="@AssetUrl(rel)" alt="preview" class="w-16 h-16 object-contain rounded border border-edge bg-[#0b0c10]" />
             }
         </div>
     };
+
+    /// <summary>Strip the engine's cascade prefixes so the written value resolves via
+    /// FlavourPath.ResolveCascade (which tries &lt;root&gt;/, /assets/, /assets/images/,
+    /// /assets/sfx/, /assets/music/). "assets/images/poster.png" → "poster.png".</summary>
+    private static string CascadeName(string rel)
+    {
+        foreach (var pre in new[] { "assets/images/", "assets/sfx/", "assets/music/", "assets/" })
+            if (rel.StartsWith(pre, StringComparison.OrdinalIgnoreCase)) return rel[pre.Length..];
+        return rel;
+    }
+
+    /// <summary>The on-disk rel for a cascade name (for preview), or null if the value
+    /// doesn't match a local asset (parent-shared / not yet uploaded).</summary>
+    private string? ResolveRel(string value)
+    {
+        var hit = Assets.FirstOrDefault(a => a.RelPath == value || CascadeName(a.RelPath) == value);
+        return hit?.RelPath;
+    }
 
     private bool MatchesKind(string rel)
     {

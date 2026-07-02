@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace CarromContentAdmin.Services;
 
 /// <summary>
@@ -94,6 +96,21 @@ public sealed class PackMap
             dir = Path.GetDirectoryName(dir);
         }
         return false;
+    }
+
+    /// <summary>Pack ids currently declared in games/packs.json — the set a targeted
+    /// (--only) build can legally name. Dirty packs NOT in here are removed flavours
+    /// that need a FULL rebuild to drop from the signed index.</summary>
+    public IReadOnlyCollection<string> KnownPackIds()
+    {
+        try
+        {
+            using var doc = JsonDocument.Parse(File.ReadAllText(_repo.PacksJson));
+            if (doc.RootElement.TryGetProperty("packs", out var p) && p.ValueKind == JsonValueKind.Object)
+                return p.EnumerateObject().Select(o => o.Name).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        }
+        catch { /* missing/malformed packs.json → treat as none known */ }
+        return new HashSet<string>(StringComparer.OrdinalIgnoreCase);
     }
 
     /// <summary>Pack ids with uncommitted changes, derived from <c>git status</c> over

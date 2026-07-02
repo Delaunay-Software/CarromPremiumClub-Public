@@ -42,7 +42,9 @@ public sealed class AssetService
     {
         var full = Path.GetFullPath(Path.Combine(node.Dir, relPath.Replace('/', Path.DirectorySeparatorChar)));
         var root = Path.GetFullPath(node.Dir);
-        if (!full.StartsWith(root, StringComparison.OrdinalIgnoreCase))
+        // Require the separator so a sibling whose name shares this node's prefix
+        // (e.g. ".../casino" vs ".../casino-x") can't be written through.
+        if (!full.StartsWith(root + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
             throw new InvalidOperationException("path escapes the node folder");
         return full;
     }

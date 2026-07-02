@@ -158,7 +158,16 @@
         {
             await RefreshDirty();
             if (_dirtyPacks is { Count: 0 }) { Log("✓ nothing dirty — no packs to rebuild"); return; }
-            only = _dirtyPacks;
+            // A dirty pack no longer in packs.json is a REMOVED flavour: --only can't
+            // name it (unknown) and can't drop its stale index entry either. Build the
+            // known dirty packs and warn that a full rebuild is needed to finish removals.
+            var known = Packs.KnownPackIds();
+            var build = _dirtyPacks!.Where(known.Contains).ToList();
+            var removed = _dirtyPacks!.Where(p => !known.Contains(p)).ToList();
+            if (removed.Count > 0)
+                Log($"⚠ {removed.Count} dirty pack(s) removed from packs.json ({string.Join(", ", removed)}) — run a FULL build (uncheck 'dirty packs only') to drop them from the signed index");
+            if (build.Count == 0) { Log("no known dirty packs to rebuild — use a full build"); return; }
+            only = build;
         }
         await Run(async () =>
         {

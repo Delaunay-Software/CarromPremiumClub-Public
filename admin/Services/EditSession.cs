@@ -49,17 +49,28 @@ public sealed class EditSession
     public bool IsNodeDirty(ContentNode node)
         => _entries.TryGetValue(node.RelPath, out var e) && Canonical(e.Working) != e.OriginalCanonical;
 
-    /// <summary>Dirty at a single top-level manifest key (a Section or Basics field).</summary>
+    /// <summary>Dirty at a single top-level manifest key (a Section or Basics field).
+    /// Both sides are canonicalised (keys sorted) so a key-reorder isn't a false change.</summary>
     public bool IsKeyDirty(ContentNode node, string key)
     {
         if (!_entries.TryGetValue(node.RelPath, out var e)) return false;
         var orig = JsonNode.Parse(e.OriginalCanonical)?.AsObject();
-        return NodeJson(e.Working[key]) != NodeJson(orig?[key]);
+        return !ValueEquals(e.Working[key], orig?[key]);
     }
 
     /// <summary>Any of the given top-level keys dirty (a Section groups several).</summary>
     public bool IsAnyKeyDirty(ContentNode node, IEnumerable<string> keys)
         => keys.Any(k => IsKeyDirty(node, k));
+
+    /// <summary>The on-disk snapshot as an object (canonicalised) so the UI can diff a
+    /// single field against its saved value for a per-field dirty indicator.</summary>
+    public JsonObject? OriginalObject(ContentNode node)
+        => _entries.TryGetValue(node.RelPath, out var e)
+            ? JsonNode.Parse(e.OriginalCanonical)?.AsObject()
+            : null;
+
+    /// <summary>Value equality that ignores object key ordering — the canonical dirty test.</summary>
+    public static bool ValueEquals(JsonNode? a, JsonNode? b) => Canonical(a) == Canonical(b);
 
     /// <summary>Persist the working model to disk (LF-normalised, validated) and reset
     /// the dirty snapshot. Returns null on success, else the validation error.</summary>
