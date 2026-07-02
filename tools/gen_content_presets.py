@@ -11,7 +11,7 @@ tools/build_content_pck.sh, which guards the .cfg around the export).
 Pack decomposition — every packable file lands in exactly ONE pack, chosen by
 its deepest owning node (mirrors FlavourPath's cascade so nothing duplicates):
 
-  common          games/ root            (manifest.json, index.json, _schema/**)
+  common          games/ root            (manifest.json, _schema/**)
   purist-common   games/purist/ root     (group manifest + shared rules/poster)
   casino-common   games/casino/ root     (flavour manifest + shared assets)
   <leaf>          games/purist/games/<leaf>/**   (icf, funfair, riviera, woodland)
