@@ -1,0 +1,23 @@
+@inherits LayoutComponentBase
+
+<div class="flex h-full">
+    <aside class="w-60 shrink-0 border-r border-edge bg-panel flex flex-col">
+        <div class="px-5 py-4 border-b border-edge">
+            <div class="text-accent font-semibold tracking-wide">Carrom Content</div>
+            <div class="text-xs text-slate-500">Admin cockpit</div>
+        </div>
+        <NavMenu />
+    </aside>
+
+    <main class="flex-1 overflow-auto">
+        <article class="max-w-6xl mx-auto px-8 py-6">
+            @Body
+        </article>
+    </main>
+</div>
+
+<div id="blazor-error-ui" class="hidden fixed bottom-0 inset-x-0 bg-red-800 text-white px-4 py-2 text-sm">
+    An unhandled error has occurred.
+    <a href="" class="underline reload">Reload</a>
+    <a class="dismiss cursor-pointer float-right">🗙</a>
+</div>

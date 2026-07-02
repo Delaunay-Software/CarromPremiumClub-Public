@@ -3,3 +3,7 @@ dist/
 .godot/
 export_presets.cfg.*.bak
 *_priv.pem
+
+# Blazor content-admin tool build output
+admin/bin/
+admin/obj/
