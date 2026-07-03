@@ -2,86 +2,90 @@
   "id": "blackjack",
   "title": "Blackjack",
   "tagline": "Closer to 21",
-  "_payout_note": "2-card blackjack. Each ring shows the 13 ranks (A,2,...,10,J,Q,K). Both rings spin \u2192 2 cards. Total scored by blackjack rules: A=11 unless that busts (only A+A \u2192 counts one A as 1 = 12). J/Q/K = 10. Payout above N=17: 21 = 6\u00d7 (jackpot), 20 = 2\u00d7, 19 = 1\u00d7, 18/17 = push (stake refund), < 17 = forfeit.",
-  "_rtp_note": "RTP 90.5% (house edge 9.5%) \u2014 casino-authentic. 169 total outcomes (13\u00b2 ordered). Total counts (sum to 169): 21=8, 20=18, 19=10, 18=11, 17=12, 16=13, 15=14, 14=15, 13=16, 12=16, 11=8, 10=7, 9=6, 8=5, 7=4, 6=3, 5=2, 4=1.",
-  "ring_count": 2,
-  "segment_count": 13,
-  "_hub_note": "Hub bumped back up \u2014 small hub made cards visually overwhelming. 35% gives the centre chip-stack room and tames the card real-estate.",
-  "hub_radius_fraction": 0.35,
-  "icon_size_fraction": 1.0,
-  "_icon_passthrough_note": "Cards ship with their own colours baked in (real LGPL-licensed art from htdebeer/SVG-cards, generated via tools/generate_blackjack_card_icons.py). Outer ring = spades, inner ring = hearts. The PNGs have been pre-rotated 180\u00b0 via tools/rotate_blackjack_icons.py so the shader's natural wedge mapping renders them face-OUTWARD (rank/suit at the outer rim).",
-  "icon_shader_clip": true,
-  "_suit_rank_note": "A high (11/1) per blackjack; J/Q/K all = 10. Tie-break unused by card_total \u2014 present for any pattern-chain fallback.",
-  "suit_rank": [
-    "A",
-    "K",
-    "Q",
-    "J",
-    "10",
-    "9",
-    "8",
-    "7",
-    "6",
-    "5",
-    "4",
-    "3",
-    "2"
-  ],
-  "outer_segments": [
-    "S_A",
-    "S_2",
-    "S_3",
-    "S_4",
-    "S_5",
-    "S_6",
-    "S_7",
-    "S_8",
-    "S_9",
-    "S_10",
-    "S_J",
-    "S_Q",
-    "S_K"
-  ],
-  "inner_segments": [
-    "H_A",
-    "H_2",
-    "H_3",
-    "H_4",
-    "H_5",
-    "H_6",
-    "H_7",
-    "H_8",
-    "H_9",
-    "H_10",
-    "H_J",
-    "H_Q",
-    "H_K"
-  ],
-  "_pattern_note": "Generic card-total lookup. rank_values overrides A/K/Q/J (numeric ranks 2\u201310 fall through to int-parse). bust_rescue lets one ace drop 11\u21921 per pass until total \u2264 bust_threshold. awards lookup is by final total; missing \u2192 0 (forfeit).",
-  "payout_patterns": [
-    {
-      "type": "card_total",
-      "rank_values": {
-        "A": 11,
-        "K": 10,
-        "Q": 10,
-        "J": 10
-      },
-      "bust_threshold": 21,
-      "bust_rescue": {
-        "A": 1
-      },
-      "awards": {
-        "21": 6,
-        "20": 2,
-        "19": 1,
-        "18": -1,
-        "17": -1
+  "rule_set": "arcade",
+  "mechanic": {
+    "type": "rotor",
+    "_payout_note": "2-card blackjack. Each ring shows the 13 ranks (A,2,...,10,J,Q,K). Both rings spin \u2192 2 cards. Total scored by blackjack rules: A=11 unless that busts (only A+A \u2192 counts one A as 1 = 12). J/Q/K = 10. Payout above N=17: 21 = 6\u00d7 (jackpot), 20 = 2\u00d7, 19 = 1\u00d7, 18/17 = push (stake refund), < 17 = forfeit.",
+    "_rtp_note": "RTP 90.5% (house edge 9.5%) \u2014 casino-authentic. 169 total outcomes (13\u00b2 ordered). Total counts (sum to 169): 21=8, 20=18, 19=10, 18=11, 17=12, 16=13, 15=14, 14=15, 13=16, 12=16, 11=8, 10=7, 9=6, 8=5, 7=4, 6=3, 5=2, 4=1.",
+    "ring_count": 2,
+    "segment_count": 13,
+    "_hub_note": "Hub bumped back up \u2014 small hub made cards visually overwhelming. 35% gives the centre chip-stack room and tames the card real-estate.",
+    "hub_radius_fraction": 0.35,
+    "icon_size_fraction": 1.0,
+    "_icon_passthrough_note": "Cards ship with their own colours baked in (real LGPL-licensed art from htdebeer/SVG-cards, generated via tools/generate_blackjack_card_icons.py). Outer ring = spades, inner ring = hearts. The PNGs have been pre-rotated 180\u00b0 via tools/rotate_blackjack_icons.py so the shader's natural wedge mapping renders them face-OUTWARD (rank/suit at the outer rim).",
+    "icon_shader_clip": true,
+    "_suit_rank_note": "A high (11/1) per blackjack; J/Q/K all = 10. Tie-break unused by card_total \u2014 present for any pattern-chain fallback.",
+    "suit_rank": [
+      "A",
+      "K",
+      "Q",
+      "J",
+      "10",
+      "9",
+      "8",
+      "7",
+      "6",
+      "5",
+      "4",
+      "3",
+      "2"
+    ],
+    "outer_segments": [
+      "S_A",
+      "S_2",
+      "S_3",
+      "S_4",
+      "S_5",
+      "S_6",
+      "S_7",
+      "S_8",
+      "S_9",
+      "S_10",
+      "S_J",
+      "S_Q",
+      "S_K"
+    ],
+    "inner_segments": [
+      "H_A",
+      "H_2",
+      "H_3",
+      "H_4",
+      "H_5",
+      "H_6",
+      "H_7",
+      "H_8",
+      "H_9",
+      "H_10",
+      "H_J",
+      "H_Q",
+      "H_K"
+    ],
+    "_pattern_note": "Generic card-total lookup. rank_values overrides A/K/Q/J (numeric ranks 2\u201310 fall through to int-parse). bust_rescue lets one ace drop 11\u21921 per pass until total \u2264 bust_threshold. awards lookup is by final total; missing \u2192 0 (forfeit).",
+    "payout_patterns": [
+      {
+        "type": "card_total",
+        "rank_values": {
+          "A": 11,
+          "K": 10,
+          "Q": 10,
+          "J": 10
+        },
+        "bust_threshold": 21,
+        "bust_rescue": {
+          "A": 1
+        },
+        "awards": {
+          "21": 6,
+          "20": 2,
+          "19": 1,
+          "18": -1,
+          "17": -1
+        }
       }
-    }
-  ],
-  "icons_dir": "assets/images/",
-  "outer_spin_secs": 3.0,
-  "inner_spin_secs": 4.5,
-  "ghost_hold_secs": 0.8
+    ],
+    "icons_dir": "assets/images/",
+    "outer_spin_secs": 3.0,
+    "inner_spin_secs": 4.5,
+    "ghost_hold_secs": 0.8
+  }
 }

@@ -117,7 +117,7 @@
     },
     "currency": {
       "type": "string",
-      "description": "GemWallet currency id (e.g. 'tokens'). Null = no per-flavour wallet."
+      "description": "Chip/token economy currency id (e.g. 'tokens'). Presence enables the wealth display + wager economy; null = pure carrom, no economy."
     },
     "surface_material": {
       "type": "string",
