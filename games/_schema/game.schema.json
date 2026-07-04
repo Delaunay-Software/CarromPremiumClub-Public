@@ -40,10 +40,9 @@
       "type": "string",
       "enum": [
         "icf",
-        "casual",
-        "arcade"
+        "casual"
       ],
-      "description": "Required on a playable LEAF. icf/casual -> built by RulesFlavour; arcade -> built by JsonFlavour (full FlavourManifest). Absent on group nodes (descend-into-children instead of play)."
+      "description": "Required on a playable LEAF. icf (tournament) / casual (relaxed) — built by RulesFlavour. Absent on group nodes (descend-into-children instead of play)."
     },
     "rules": {
       "type": "object",
