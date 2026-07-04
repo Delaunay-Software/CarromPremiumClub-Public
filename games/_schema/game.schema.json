@@ -123,6 +123,10 @@
       "type": "string",
       "description": "icf/casual leaves \u2014 PbrTextureSetRegistry id for the playing surface."
     },
+    "surface_tint": {
+      "type": "string",
+      "description": "Optional #RRGGBB multiply over the playing-surface albedo (e.g. tint an ivory/felt set navy for a slate look). Absent \u2014 the wood set's own tone."
+    },
     "frame_material": {
       "type": "string",
       "description": "icf/casual leaves \u2014 PbrTextureSetRegistry id for the frame border."
