@@ -231,7 +231,24 @@
     },
     "environment": {
       "type": "string",
-      "description": "LightingPreset / environment id (e.g. 'cafe'). Drives lights + sky + table furniture."
+      "description": "LightingPreset / environment id (e.g. 'cafe'). Drives lights + sky + table furniture. The optional `lighting` block overrides its light rig field-by-field."
+    },
+    "lighting": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Full lighting rig authored in-manifest, merged OVER the `environment` preset (unset fields inherit it). Rotations are [x,y,z] degrees, sizes [w,h] cm, colours #RRGGBB.",
+      "properties": {
+        "main_color":    { "type": "string", "description": "Key directional light colour (#RRGGBB)." },
+        "main_energy":   { "type": "number", "description": "Key directional light energy." },
+        "main_rotation": { "type": "array", "items": { "type": "number" }, "minItems": 3, "maxItems": 3, "description": "Key light Euler rotation [x,y,z] deg." },
+        "ambient_color": { "type": "string", "description": "Ambient light colour (#RRGGBB)." },
+        "ambient_energy":{ "type": "number", "description": "Ambient light energy." },
+        "fog_density":   { "type": "number", "description": "Depth-fog density (0 = none)." },
+        "fill":          { "type": "object", "additionalProperties": false, "description": "Soft secondary directional. Present replaces the preset fill; omit to inherit.", "properties": { "color": { "type": "string" }, "energy": { "type": "number" }, "rotation": { "type": "array", "items": { "type": "number" } } } },
+        "spot":          { "type": "object", "additionalProperties": false, "description": "Overhead spot.", "properties": { "color": { "type": "string" }, "energy": { "type": "number" }, "rotation": { "type": "array", "items": { "type": "number" } }, "range": { "type": "number" }, "angle": { "type": "number" } } },
+        "area":          { "type": "object", "additionalProperties": false, "description": "Soft overhead rectangular area light.", "properties": { "color": { "type": "string" }, "energy": { "type": "number" }, "size": { "type": "array", "items": { "type": "number" } }, "height": { "type": "number" }, "rotation": { "type": "array", "items": { "type": "number" } } } },
+        "procedural_sky":{ "type": "object", "additionalProperties": false, "description": "Gradient sky (outdoor).", "properties": { "top": { "type": "string" }, "horizon": { "type": "string" }, "ground_bottom": { "type": "string" } } }
+      }
     },
     "reflection_floor": {
       "type": "string",
