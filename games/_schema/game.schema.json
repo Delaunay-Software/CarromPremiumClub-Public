@@ -128,6 +128,10 @@
       "pattern": "^#[0-9A-Fa-f]{6}$",
       "description": "Optional #RRGGBB multiply over the frame albedo (e.g. pick a leather set then tint it oxblood). Absent \u2014 the wood set's own FrameTone."
     },
+    "frame_material_scale": {
+      "type": "number",
+      "description": "Triplanar tile scale for a NON-WOOD frame material (leather): smaller = larger tile / fewer repeats along the rail. Wood frames ignore it. Default 0.05."
+    },
     "surface_material_id": {
       "type": "string",
       "description": "Alias for surface_material."
