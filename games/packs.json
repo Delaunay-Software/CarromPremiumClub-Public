@@ -9,53 +9,9 @@
       "tier": "common",
       "files": 2
     },
-    "casino-blackjack": {
-      "tier": "flavour",
-      "files": 27
-    },
-    "casino-blackjack-card": {
-      "tier": "common",
-      "files": 2
-    },
-    "casino-common": {
-      "tier": "common",
-      "files": 34
-    },
-    "casino-craps": {
-      "tier": "flavour",
-      "files": 7
-    },
-    "casino-craps-card": {
-      "tier": "common",
-      "files": 2
-    },
-    "casino-poker": {
-      "tier": "flavour",
-      "files": 21
-    },
-    "casino-poker-card": {
-      "tier": "common",
-      "files": 2
-    },
-    "casino-roulette": {
-      "tier": "flavour",
-      "files": 38
-    },
-    "casino-roulette-card": {
-      "tier": "common",
-      "files": 2
-    },
-    "casino-slots": {
-      "tier": "flavour",
-      "files": 6
-    },
-    "casino-slots-card": {
-      "tier": "common",
-      "files": 2
-    },
     "common": {
       "tier": "common",
-      "files": 5
+      "files": 3
     },
     "funfair": {
       "tier": "flavour",
