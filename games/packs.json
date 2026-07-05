@@ -3,7 +3,7 @@
   "packs": {
     "cafe": {
       "tier": "flavour",
-      "files": 7
+      "files": 8
     },
     "cafe-card": {
       "tier": "common",
@@ -43,7 +43,7 @@
     },
     "woodland": {
       "tier": "flavour",
-      "files": 4
+      "files": 5
     },
     "woodland-card": {
       "tier": "common",
