@@ -11,5 +11,8 @@
     "white_material": "rough_white",
     "black_material": "rough_brown",
     "queen_material": "rough_red"
+  },
+  "grunge": {
+    "coins": { "wear": 0.45, "grime": 0.25 }
   }
 }
