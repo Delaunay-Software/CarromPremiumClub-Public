@@ -119,6 +119,10 @@
       "pattern": "^#[0-9A-Fa-f]{6}$",
       "description": "Optional #RRGGBB multiply over the playing-surface albedo (e.g. tint an ivory/felt set navy for a slate look). Absent \u2014 the wood set's own tone."
     },
+    "surface_powder_film": {
+      "type": "number",
+      "description": "Uniform base powder film (talc/boric haze) over the whole playing surface; the grunge board powder channel adds to it. 0 = clean. ~0.1-0.3 for a dusty board."
+    },
     "frame_material": {
       "type": "string",
       "description": "icf/casual leaves \u2014 PbrTextureSetRegistry id for the frame border."
