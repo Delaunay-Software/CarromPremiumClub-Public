@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dg4fyutk13kqv"
-path="res://.godot/imported/pocket.png-98b1d1544dde7ef35bbe71270dea30d4.ctex"
+path="res://.godot/imported/pocket.png-4bbd5e1cc1a9d0fe212a7d63f7e2dd4b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://games/purist/games/funfair/assets/images/pocket.png"
-dest_files=["res://.godot/imported/pocket.png-98b1d1544dde7ef35bbe71270dea30d4.ctex"]
+source_file="res://games/purist/games/vintage_parlour/assets/images/pocket.png"
+dest_files=["res://.godot/imported/pocket.png-4bbd5e1cc1a9d0fe212a7d63f7e2dd4b.ctex"]
 
 [params]
 

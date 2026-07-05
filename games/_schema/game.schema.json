@@ -230,7 +230,7 @@
     },
     "corner_cap_mesh": {
       "type": "string",
-      "description": "Shared corner-cap GLB in the engine root library res://assets/meshes/ (e.g. 'half_corner_cap.glb' / 'full_corner_cap.glb'); geometry only, surfaced via corner_cap_material. Absent \u2192 the flavour's own assets/meshes/corner_cap.glb."
+      "description": "Shared corner-cap GLB in the engine root library res://assets/meshes/ (e.g. 'outer_corner_cap.glb' / 'full_corner_cap.glb' / 'quarter_corner_cap.glb'); geometry only, surfaced via corner_cap_material. Absent \u2192 the flavour's own assets/meshes/corner_cap.glb."
     },
     "corner_cap_material": {
       "type": "string",

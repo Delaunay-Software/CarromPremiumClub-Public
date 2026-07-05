@@ -3,9 +3,10 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ctn278x8j6s2"
-path="res://.godot/imported/coin_white_ColorYellow.jpg-82e228d3a7a3417a4a18129184408ba3.ctex"
+path.s3tc="res://.godot/imported/coin_white_ColorYellow.jpg-6cfcf0222d8a1193943386b841e40a28.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 generator_parameters={
 "md5": "6752c3e668914165bfac1cea9c76d2d6"
@@ -13,12 +14,12 @@ generator_parameters={
 
 [deps]
 
-source_file="res://games/purist/games/funfair/assets/meshes/coin_white_ColorYellow.jpg"
-dest_files=["res://.godot/imported/coin_white_ColorYellow.jpg-82e228d3a7a3417a4a18129184408ba3.ctex"]
+source_file="res://games/purist/games/vintage_parlour/assets/meshes/coin_white_ColorYellow.jpg"
+dest_files=["res://.godot/imported/coin_white_ColorYellow.jpg-6cfcf0222d8a1193943386b841e40a28.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -40,4 +41,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

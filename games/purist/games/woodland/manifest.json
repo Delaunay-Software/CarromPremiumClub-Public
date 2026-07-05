@@ -9,11 +9,16 @@
   "corner_style": "rounded",
   "markings": {
     "line_color": "#740005",
-    "spot_color": "#740005"
+    "spot_color": "#740005",
+    "board_edge_trim": "brass",
+    "pocket_rim_trim": "brass"
   },
   "corner_albedo_scale": 1.0500000000029104,
   "frame_material": "leather",
-  "corner_cap_mesh": "full_corner_cap.glb",
+  "corner_cap_mesh": "quarter_corner_cap.glb",
   "corner_cap_material": "brass",
-  "table_material": "rough"
+  "corner_cap_scale": 0.8500000000058208,
+  "table_material": "rough",
+  "frame_tint": "#301b1b",
+  "corner_cap_offset_h": -3
 }

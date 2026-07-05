@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://yophuni1yh40"
-path="res://.godot/imported/table.glb-a274f529a0680a6f5b056e3693e31285.scn"
+path="res://.godot/imported/table.glb-9a5614a88f97918b1603a41e72d8217e.scn"
 
 [deps]
 
-source_file="res://games/purist/games/funfair/assets/meshes/table.glb"
-dest_files=["res://.godot/imported/table.glb-a274f529a0680a6f5b056e3693e31285.scn"]
+source_file="res://games/purist/games/vintage_parlour/assets/meshes/table.glb"
+dest_files=["res://.godot/imported/table.glb-9a5614a88f97918b1603a41e72d8217e.scn"]
 
 [params]
 

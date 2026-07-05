@@ -3,9 +3,10 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dttg2nejh2wrr"
-path="res://.godot/imported/table_plane_DefaultMaterial_BaseColor.jpg-a490a99543b85d1379d27a3f51ae237d.ctex"
+path.s3tc="res://.godot/imported/table_plane_DefaultMaterial_BaseColor.jpg-d7082eb664ca555e068e1189f76696f0.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 generator_parameters={
 "md5": "1cf0396e7e911ed7a9f991f413373da6"
@@ -13,12 +14,12 @@ generator_parameters={
 
 [deps]
 
-source_file="res://games/purist/games/funfair/assets/meshes/table_plane_DefaultMaterial_BaseColor.jpg"
-dest_files=["res://.godot/imported/table_plane_DefaultMaterial_BaseColor.jpg-a490a99543b85d1379d27a3f51ae237d.ctex"]
+source_file="res://games/purist/games/vintage_parlour/assets/meshes/table_plane_DefaultMaterial_BaseColor.jpg"
+dest_files=["res://.godot/imported/table_plane_DefaultMaterial_BaseColor.jpg-d7082eb664ca555e068e1189f76696f0.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -40,4 +41,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

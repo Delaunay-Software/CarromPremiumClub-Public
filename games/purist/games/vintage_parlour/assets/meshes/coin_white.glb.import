@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://w6faj8ijm0g1"
-path="res://.godot/imported/coin_white.glb-65b6de1bf2d2b4b88e9fa5bb97036e73.scn"
+path="res://.godot/imported/coin_white.glb-4451b75300e17460d1e5472ec64642a5.scn"
 
 [deps]
 
-source_file="res://games/purist/games/funfair/assets/meshes/coin_white.glb"
-dest_files=["res://.godot/imported/coin_white.glb-65b6de1bf2d2b4b88e9fa5bb97036e73.scn"]
+source_file="res://games/purist/games/vintage_parlour/assets/meshes/coin_white.glb"
+dest_files=["res://.godot/imported/coin_white.glb-4451b75300e17460d1e5472ec64642a5.scn"]
 
 [params]
 

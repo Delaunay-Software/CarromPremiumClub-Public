@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://3wrt8ueft2x"
-path="res://.godot/imported/coin_queen.glb-79b56b6c79163f604ccff0236b270d53.scn"
+path="res://.godot/imported/coin_queen.glb-31ee9507f20729a376bc2c86c6109b24.scn"
 
 [deps]
 
-source_file="res://games/purist/games/funfair/assets/meshes/coin_queen.glb"
-dest_files=["res://.godot/imported/coin_queen.glb-79b56b6c79163f604ccff0236b270d53.scn"]
+source_file="res://games/purist/games/vintage_parlour/assets/meshes/coin_queen.glb"
+dest_files=["res://.godot/imported/coin_queen.glb-31ee9507f20729a376bc2c86c6109b24.scn"]
 
 [params]
 

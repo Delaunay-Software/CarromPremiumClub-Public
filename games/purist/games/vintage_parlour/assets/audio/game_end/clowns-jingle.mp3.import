@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://bp58j1vl3n864"
-path="res://.godot/imported/clowns-jingle.mp3-e1ffa691bfaca86b81ad88ddbe8037ab.mp3str"
+path="res://.godot/imported/clowns-jingle.mp3-9baccc73b5c2264ba5288a190695bc22.mp3str"
 
 [deps]
 
-source_file="res://games/purist/games/funfair/assets/audio/game_end/clowns-jingle.mp3"
-dest_files=["res://.godot/imported/clowns-jingle.mp3-e1ffa691bfaca86b81ad88ddbe8037ab.mp3str"]
+source_file="res://games/purist/games/vintage_parlour/assets/audio/game_end/clowns-jingle.mp3"
+dest_files=["res://.godot/imported/clowns-jingle.mp3-9baccc73b5c2264ba5288a190695bc22.mp3str"]
 
 [params]
 

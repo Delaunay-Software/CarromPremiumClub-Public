@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://8gdofv7mqjs5"
-path="res://.godot/imported/coin_black.glb-463b4715fb33f231e59de0110d86ce3b.scn"
+path="res://.godot/imported/coin_black.glb-95e75fc6f392c6633c1ec99671176bb9.scn"
 
 [deps]
 
-source_file="res://games/purist/games/funfair/assets/meshes/coin_black.glb"
-dest_files=["res://.godot/imported/coin_black.glb-463b4715fb33f231e59de0110d86ce3b.scn"]
+source_file="res://games/purist/games/vintage_parlour/assets/meshes/coin_black.glb"
+dest_files=["res://.godot/imported/coin_black.glb-95e75fc6f392c6633c1ec99671176bb9.scn"]
 
 [params]
 

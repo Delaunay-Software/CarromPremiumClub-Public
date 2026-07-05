@@ -19,16 +19,12 @@
   "table_height": 780,
   "chair_yaw": 180,
   "leg_material": "mahogany",
-  "coin_profile": "deluxe",
   "coins": {
     "white": "#F3E6C8",
     "black": "#1B1712",
     "queen": "#B8322A",
     "striker": "#6B3E1E",
-    "bevel": "brass",
-    "finish": "polished",
-    "roughness": 0.34,
-    "metallic": 0.0
+    "roughness": 0.34
   },
   "markings": {
     "line_color": "#5A2F16",

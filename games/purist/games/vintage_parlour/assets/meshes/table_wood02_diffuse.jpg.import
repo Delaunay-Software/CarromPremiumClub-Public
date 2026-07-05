@@ -3,9 +3,10 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dq0ltwhlbypmk"
-path="res://.godot/imported/table_wood02_diffuse.jpg-0cd852683fa7ae9bf62047815bae0144.ctex"
+path.s3tc="res://.godot/imported/table_wood02_diffuse.jpg-3312441de993b0eadea38003f0de586f.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 generator_parameters={
 "md5": "58de9c9c059406196d9e1340c9f82494"
@@ -13,12 +14,12 @@ generator_parameters={
 
 [deps]
 
-source_file="res://games/purist/games/funfair/assets/meshes/table_wood02_diffuse.jpg"
-dest_files=["res://.godot/imported/table_wood02_diffuse.jpg-0cd852683fa7ae9bf62047815bae0144.ctex"]
+source_file="res://games/purist/games/vintage_parlour/assets/meshes/table_wood02_diffuse.jpg"
+dest_files=["res://.godot/imported/table_wood02_diffuse.jpg-3312441de993b0eadea38003f0de586f.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
@@ -40,4 +41,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=1
+detect_3d/compress_to=0

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dbknyisqpdady"
-path="res://.godot/imported/kaleidoscope.png-2a0b62fb30e7a550c84999fa0e37193b.ctex"
+path="res://.godot/imported/kaleidoscope.png-ce4ab7fcc939af14fa328b355dbc368d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://games/purist/games/funfair/assets/strikers/kaleidoscope.png"
-dest_files=["res://.godot/imported/kaleidoscope.png-2a0b62fb30e7a550c84999fa0e37193b.ctex"]
+source_file="res://games/purist/games/vintage_parlour/assets/strikers/kaleidoscope.png"
+dest_files=["res://.godot/imported/kaleidoscope.png-ce4ab7fcc939af14fa328b355dbc368d.ctex"]
 
 [params]
 

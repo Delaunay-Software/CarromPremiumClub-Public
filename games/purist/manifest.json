@@ -5,14 +5,14 @@
   "card_texture": "res://assets/textures/mahogany/Color.jpg",
   "coins": {
     "white":      "#FFFFFF",
-    "black":      "#FFFFFF",
-    "queen":      "#FFFFFF",
+    "black":      "#2A2119",
+    "queen":      "#B0291F",
     "striker":    "#FFFFFF",
     "white_material": "rough_white",
-    "black_material": "rough_brown",
-    "queen_material": "rough_red"
+    "black_material": "rough_white",
+    "queen_material": "rough_white"
   },
   "grunge": {
-    "coins": { "wear": 0.45, "grime": 0.25 }
+    "coins": { "wear": 0.12, "grime": 0.15 }
   }
 }
