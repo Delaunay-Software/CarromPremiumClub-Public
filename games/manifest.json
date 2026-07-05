@@ -22,7 +22,7 @@
       "horizon": 0.15
     },
     "ssil": false,
-    "ssr": false,
+    "ssr": true,
     "grade": {
       "brightness": 1.0,
       "contrast": 1.08,
