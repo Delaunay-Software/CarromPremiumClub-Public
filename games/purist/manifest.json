@@ -8,9 +8,9 @@
     "black":      "#2A2119",
     "queen":      "#B0291F",
     "striker":    "#FFFFFF",
-    "white_material": "rough_white",
-    "black_material": "rough_white",
-    "queen_material": "rough_white"
+    "white_material": "rough",
+    "black_material": "rough",
+    "queen_material": "rough"
   },
   "grunge": {
     "coins": { "wear": 0.12, "grime": 0.15 }
