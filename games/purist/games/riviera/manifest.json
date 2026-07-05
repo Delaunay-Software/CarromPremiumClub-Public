@@ -12,7 +12,7 @@
   "environment": "beach",
   "surface_material": "ivory",
   "surface_roughness_scale": 0.2,
-  "frame_material": "rough",
+  "frame_material": "ivory",
   "frame_finish": "satin",
   "corner_style": "rounded",
   "corner_cap_mesh": "outer_corner_cap.glb",
@@ -38,5 +38,5 @@
     "board_edge_trim": "brass",
     "pocket_cup_color": "#0B1F3B"
   },
-  "corner_albedo_scale": 1.0500000000029104
+  "corner_albedo_scale": 1
 }

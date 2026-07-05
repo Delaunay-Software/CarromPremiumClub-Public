@@ -12,12 +12,12 @@
   "frame_material": "mahogany",
   "frame_finish": "gloss",
   "board_size": "mini",
-  "glass_top": true,
+  "glass_top": false,
   "markings": {
     "line_color": "#740005",
     "spot_color": "#740005",
     "pocket_cup_color": "#740005"
   },
-  "table_material": "rough",
-  "leg_material": "rough"
+  "table_material": "mahogany",
+  "leg_material": "mahogany"
 }
