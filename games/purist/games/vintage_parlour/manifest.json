@@ -1,0 +1,17 @@
+{
+  "id": "vintage_parlour",
+  "title": "Vintage Parlour",
+  "tagline": "Smaller board, relaxed rules",
+  "rule_set": "casual",
+  "accent": "#FF8C42",
+  "turn_marker": { "scale": 1.0, "offset_y": -93 },
+  "surface_material": "beech",
+  "frame_material":   "beech",
+  "frame_finish": "gloss",
+  "board_size": "mini",
+  "markings": {
+    "line_color": "#740005",
+    "spot_color": "#740005",
+    "pocket_cup_color": "#740005"
+  }
+}

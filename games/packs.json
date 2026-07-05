@@ -13,14 +13,6 @@
       "tier": "common",
       "files": 3
     },
-    "funfair": {
-      "tier": "flavour",
-      "files": 24
-    },
-    "funfair-card": {
-      "tier": "common",
-      "files": 2
-    },
     "icf": {
       "tier": "flavour",
       "files": 11
@@ -38,6 +30,14 @@
       "files": 18
     },
     "riviera-card": {
+      "tier": "common",
+      "files": 2
+    },
+    "vintage_parlour": {
+      "tier": "flavour",
+      "files": 24
+    },
+    "vintage_parlour-card": {
       "tier": "common",
       "files": 2
     },

@@ -5,11 +5,14 @@
   "rule_set": "casual",
   "accent": "#2E8FB5",
   "board_size": "junior",
-  "turn_marker": { "scale": 2.0, "offset_y": -37 },
+  "turn_marker": {
+    "scale": 2.0,
+    "offset_y": -37
+  },
   "environment": "beach",
   "surface_material": "ivory",
   "surface_roughness_scale": 0.2,
-  "frame_material": "rough_brown",
+  "frame_material": "mahogany",
   "frame_finish": "satin",
   "corner_style": "rounded",
   "corner_cap_mesh": "half_corner_cap.glb",
@@ -34,5 +37,6 @@
     "pocket_rim_trim": "brass",
     "board_edge_trim": "brass",
     "pocket_cup_color": "#0B1F3B"
-  }
+  },
+  "corner_albedo_scale": 1.0500000000029104
 }
