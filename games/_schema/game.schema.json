@@ -171,6 +171,10 @@
       "type": "boolean",
       "description": "Per-game graphics toggle: drifting atmosphere dust motes over the table. Default true (also needs Medium+ graphics + a backdrop). IFlavour.WantsAmbientDust."
     },
+    "glass_top": {
+      "type": "boolean",
+      "description": "Cabinet-style recessed glass pane over the playing surface (amusement-arcade look). Default off. IFlavour.WantsGlassTop."
+    },
     "surface_roughness": {
       "type": "number",
       "description": "Playing-surface roughness (lower = glossier, 1.0 = fully matte / no shine). Default 0.30. Flavour.SurfaceRoughness."

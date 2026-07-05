@@ -9,6 +9,7 @@
   "frame_material":   "beech",
   "frame_finish": "gloss",
   "board_size": "mini",
+  "glass_top": true,
   "markings": {
     "line_color": "#740005",
     "spot_color": "#740005",
