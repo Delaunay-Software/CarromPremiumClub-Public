@@ -1,7 +1,7 @@
 {
   "id": "engine",
   "table_height": 800,
-  "surface_powder_film": 0.5,
+  "surface_powder_film": 0.1,
   "grunge": {
     "coins": {
       "wear": 0.35,"powder": 0.1,"grime":  0.1
