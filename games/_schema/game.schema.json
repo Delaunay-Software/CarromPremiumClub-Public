@@ -123,6 +123,11 @@
       "type": "string",
       "description": "icf/casual leaves \u2014 PbrTextureSetRegistry id for the frame border."
     },
+    "frame_tint": {
+      "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}$",
+      "description": "Optional #RRGGBB multiply over the frame albedo (e.g. pick a leather set then tint it oxblood). Absent \u2014 the wood set's own FrameTone."
+    },
     "surface_material_id": {
       "type": "string",
       "description": "Alias for surface_material."
@@ -138,6 +143,11 @@
     "table_material": {
       "type": "string",
       "description": "PbrTextureSetRegistry id for the supporting wood table slab under the board."
+    },
+    "table_tint": {
+      "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}$",
+      "description": "Optional #RRGGBB multiply over the table-top albedo. Absent — the set's own tone."
     },
     "surface_roughness_scale": {
       "type": "number",
@@ -225,6 +235,18 @@
     "corner_cap_material_normal": {
       "type": "number",
       "description": "Normal-map strength for the corner-cap material (punch the leather pores / brass brushing). Default 1.0."
+    },
+    "corner_cap_scale": {
+      "type": "number",
+      "description": "Multiplier on the corner cap's auto-fit (the generic cap is scaled to the board's frame width). 1.0 = auto-fit; adjust to taste."
+    },
+    "corner_cap_offset_h": {
+      "type": "number",
+      "description": "Corner-cap nudge outward(+)/inward(-) along the corner diagonal, in mm. Default 0."
+    },
+    "corner_cap_offset_y": {
+      "type": "number",
+      "description": "Corner-cap vertical lift, in mm. Default 0."
     },
     "environment": {
       "type": "string",
