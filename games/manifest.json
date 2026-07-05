@@ -2,6 +2,41 @@
   "id": "engine",
   "table_height": 800,
   "surface_powder_film": 0.1,
+  "realism": {
+    "tonemap": "agx",
+    "tonemap_white": 6.0,
+    "glow": {
+      "threshold": 1.6,
+      "scale": 1.3,
+      "intensity": 0.18,
+      "strength": 0.65,
+      "bloom": 0.0,
+      "levels": [0.2, 0.6, 1.0, 0.6, 0.3]
+    },
+    "ssao": {
+      "enabled": true,
+      "radius": 1.1,
+      "intensity": 2.0,
+      "power": 1.4,
+      "detail": 0.4,
+      "horizon": 0.15
+    },
+    "ssil": false,
+    "ssr": false,
+    "grade": {
+      "brightness": 1.0,
+      "contrast": 1.06,
+      "saturation": 1.08
+    },
+    "fog": {
+      "depth_begin": 150,
+      "depth_end": 900,
+      "curve": 2.0,
+      "sky_affect": 0.12,
+      "light_color": "#9EA1A8",
+      "light_energy": 0.8
+    }
+  },
   "grunge": {
     "coins": {
       "wear": 0.35,"powder": 0.1,"grime":  0.1

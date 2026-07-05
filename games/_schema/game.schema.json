@@ -277,6 +277,47 @@
         "procedural_sky":{ "type": "object", "additionalProperties": false, "description": "Gradient sky (outdoor).", "properties": { "top": { "type": "string" }, "horizon": { "type": "string" }, "ground_bottom": { "type": "string" } } }
       }
     },
+    "realism": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Post-processing / render realism (WorldEnvironment). Every field optional — unset inherits the engine default. Sets VALUES only; the engine still tier-gates whether glow / ssao / fog actually run.",
+      "properties": {
+        "tonemap":       { "type": "string", "enum": ["agx", "aces", "filmic", "reinhard", "linear"], "description": "Tone mapper. Default agx." },
+        "tonemap_white": { "type": "number", "description": "White point — higher rolls highlights off further. Default 6.0." },
+        "glow": { "type": "object", "additionalProperties": false, "description": "HDR glow/bloom (High tier only).", "properties": {
+          "threshold": { "type": "number", "description": "HDR luminance above which pixels bloom. Raise to stop lit surfaces blooming. Default 1.6." },
+          "scale":     { "type": "number", "description": "Default 1.3." },
+          "intensity": { "type": "number", "description": "Default 0.18." },
+          "strength":  { "type": "number", "description": "Default 0.65." },
+          "bloom":     { "type": "number", "description": "Blanket bloom on merely-bright pixels. Default 0." },
+          "levels":    { "type": "array", "items": { "type": "number" }, "minItems": 5, "maxItems": 5, "description": "Mip weights 1-5 (low index = tight halo, high = wide wash). Default [0.2,0.6,1.0,0.6,0.3]." }
+        } },
+        "ssao": { "type": "object", "additionalProperties": false, "description": "Screen-space ambient occlusion.", "properties": {
+          "enabled":   { "type": "boolean", "description": "Default true." },
+          "radius":    { "type": "number", "description": "cm. Default 1.1." },
+          "intensity": { "type": "number", "description": "Default 2.0." },
+          "power":     { "type": "number", "description": "Default 1.4." },
+          "detail":    { "type": "number", "description": "Default 0.4." },
+          "horizon":   { "type": "number", "description": "Default 0.15." }
+        } },
+        "ssil": { "type": "boolean", "description": "Screen-space indirect lighting (colour bleed). Default false (noisy)." },
+        "ssr":  { "type": "boolean", "description": "Screen-space reflections. Default false." },
+        "grade": { "type": "object", "additionalProperties": false, "description": "Filmic colour grade over the tonemapped output.", "properties": {
+          "brightness": { "type": "number", "description": "Default 1.0." },
+          "contrast":   { "type": "number", "description": "Default 1.06." },
+          "saturation": { "type": "number", "description": "Default 1.08." }
+        } },
+        "fog": { "type": "object", "additionalProperties": false, "description": "Depth fog (aerial perspective). density 0 = off. Distances in cm.", "properties": {
+          "density":      { "type": "number", "description": "Overrides the per-preset density. Default 0.12 (outdoor), ~0 indoor." },
+          "depth_begin":  { "type": "number", "description": "cm — fog starts past this (board stays crisp). Default 150." },
+          "depth_end":    { "type": "number", "description": "Default 900." },
+          "curve":        { "type": "number", "description": "Ease-in curve. Default 2.0." },
+          "sky_affect":   { "type": "number", "description": "How much fog veils the backdrop. Default 0.12." },
+          "light_color":  { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$", "description": "Fog colour #RRGGBB. Default #9EA1A8." },
+          "light_energy": { "type": "number", "description": "Default 0.8." }
+        } }
+      }
+    },
     "reflection_floor": {
       "type": "string",
       "pattern": "^#[0-9A-Fa-f]{6}$",
