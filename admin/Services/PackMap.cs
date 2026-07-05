@@ -42,9 +42,9 @@ public sealed class PackMap
         => rel.Contains('.') ? rel[(rel.LastIndexOf('.') + 1)..].ToLowerInvariant() : "";
 
     /// <summary>The pack id a games-relative path ships in. Mirrors the Python tool
-    /// byte-for-byte: casino leaves → <c>casino-&lt;sub&gt;</c>, purist leaves → the bare
-    /// leaf id, group roots → <c>&lt;group&gt;-common</c>, games/ root → <c>common</c>;
-    /// leaf card assets split into <c>&lt;base&gt;-card</c>.</summary>
+    /// byte-for-byte: purist leaves → the bare leaf id, group roots →
+    /// <c>&lt;group&gt;-common</c>, games/ root → <c>common</c>; leaf card assets split
+    /// into <c>&lt;base&gt;-card</c>.</summary>
     public static string PackForRel(string rel)
     {
         rel = rel.Replace('\\', '/').TrimStart('/');
@@ -52,12 +52,7 @@ public sealed class PackMap
         var top = seg[0];
         string @base;
         bool isLeaf = false;
-        if (top == "casino")
-        {
-            if (seg.Length >= 3 && seg[1] == "games") { @base = $"casino-{seg[2]}"; isLeaf = true; }
-            else @base = "casino-common";
-        }
-        else if (top == "purist")
+        if (top == "purist")
         {
             if (seg.Length >= 3 && seg[1] == "games") { @base = seg[2]; isLeaf = true; }
             else @base = "purist-common";

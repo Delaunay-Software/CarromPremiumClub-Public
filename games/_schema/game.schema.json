@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://carrom-engine/games/_schema/game.schema.json",
   "title": "Carrom games/ manifest",
-  "$comment": "Validates ONE manifest.json under res://games/ in isolation. The runtime loader (scripts/ui/menu/FlavourLoader.cs) walks the tree and cascades manifest fields + asset lookups leaf -> ancestors -> engine defaults; that cascade is NOT visible to the schema. The same schema covers three node shapes: (1) engine root games/manifest.json (sparse, no rule_set, no UI), (2) group nodes (title/tagline/accent only \u2014 clicking descends into games/<id>/), (3) leaf nodes (carry rule_set: 'icf' | 'casual' | 'arcade'; arcade leaves carry the full FlavourManifest shape). A FOURTH shape \u2014 per-mini-game configs inside an arcade flavour (games/<flavour>/games/<sub>/manifest.json) \u2014 uses type: 'rotor' + rotor params (ring_count, segment_count, payout_patterns, ...). All four shapes overlap; every field below is optional so a sparse manifest validates. The runtime decides which fields it actually consumes based on rule_set / type. Mini-games are NOT listed in a `mechanics` array: the loader auto-discovers them by walking child folders, so the schema does not declare that field.",
+  "$comment": "Validates ONE manifest.json under res://games/ in isolation. The runtime loader (scripts/ui/menu/FlavourLoader.cs) walks the tree and cascades manifest fields + asset lookups leaf -> ancestors -> engine defaults; that cascade is NOT visible to the schema. The same schema covers three node shapes: (1) engine root games/manifest.json (sparse, no rule_set, no UI), (2) group nodes (title/tagline/accent only \u2014 clicking descends into games/<id>/), (3) leaf nodes (carry rule_set: 'icf' | 'casual'; icf = tournament, casual = relaxed carrom). All three shapes overlap; every field below is optional so a sparse manifest validates. The runtime decides which fields it actually consumes based on rule_set.",
   "type": "object",
   "additionalProperties": true,
   "properties": {
@@ -91,32 +91,24 @@
             "boolean",
             "null"
           ],
-          "description": "True (arcade): queen has no cover requirement, no early-queen return, no special turn-flow side effects."
+          "description": "True: queen has no cover requirement, no early-queen return, no special turn-flow side effects — treated as an ordinary coin."
         },
         "coin_off_board_is_foul": {
           "type": [
             "boolean",
             "null"
           ],
-          "description": "True (ICF): a non-striker coin jumping off the board is a foul \u2014 returned to centre AND the shooter loses one own coin (or owes a due) and the turn passes. False (Casual/Arcade): the coin just returns, no penalty."
+          "description": "True (ICF): a non-striker coin jumping off the board is a foul \u2014 returned to centre AND the shooter loses one own coin (or owes a due) and the turn passes. False (Casual): the coin just returns, no penalty."
         }
       }
     },
     "board_size": {
       "type": "string",
-      "description": "BoardSizeRegistry id. Defaults to 'icf' for rules leaves; arcade leaves default to whatever BoardSize resolves to."
+      "description": "BoardSizeRegistry id. Defaults to 'icf' for rules leaves."
     },
     "leaderboard_id": {
       "type": "string",
       "description": "Steam leaderboard partition id. Defaults to the flavour id."
-    },
-    "completionist_achievement": {
-      "type": "string",
-      "description": "Arcade only \u2014 Steam achievement awarded when every sub-game has been played."
-    },
-    "currency": {
-      "type": "string",
-      "description": "Chip/token economy currency id (e.g. 'tokens'). Presence enables the wealth display + wager economy; null = pure carrom, no economy."
     },
     "surface_material": {
       "type": "string",
@@ -124,6 +116,7 @@
     },
     "surface_tint": {
       "type": "string",
+      "pattern": "^#[0-9A-Fa-f]{6}$",
       "description": "Optional #RRGGBB multiply over the playing-surface albedo (e.g. tint an ivory/felt set navy for a slate look). Absent \u2014 the wood set's own tone."
     },
     "frame_material": {
@@ -132,11 +125,11 @@
     },
     "surface_material_id": {
       "type": "string",
-      "description": "Arcade leaves \u2014 same as surface_material."
+      "description": "Alias for surface_material."
     },
     "frame_material_id": {
       "type": "string",
-      "description": "Arcade leaves \u2014 same as frame_material."
+      "description": "Alias for frame_material."
     },
     "leg_material": {
       "type": "string",
@@ -172,7 +165,7 @@
     },
     "reflection_probe": {
       "type": "boolean",
-      "description": "Per-game graphics toggle: local box-projected reflection probe (sharp metal reflections). Absent \u2192 follows arcade-overlay (purist flavours use the soft sky IBL). IFlavour.WantsReflectionProbe."
+      "description": "Per-game graphics toggle: local box-projected reflection probe (sharp metal reflections). Absent \u2192 off (flavours use the soft sky IBL). IFlavour.WantsReflectionProbe."
     },
     "ambient_dust": {
       "type": "boolean",
@@ -257,7 +250,7 @@
     },
     "coin_profile": {
       "type": "string",
-      "description": "CoinBuilderRegistry id for the coin body geometry: 'wood' (default, ICF/Casual) or 'deluxe' (casino chip)."
+      "description": "CoinBuilderRegistry id for the coin body geometry: 'wood' (default, ICF/Casual) or 'deluxe' (enamel/brass chip coins used by themed casual leaves)."
     },
     "chair_yaw": {
       "type": "number",
@@ -335,23 +328,6 @@
       "type": "string",
       "pattern": "^#[0-9A-Fa-f]{6}$"
     },
-    "palette": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "pattern": "^#[0-9A-Fa-f]{6}$"
-      }
-    },
-    "surround_shape": {
-      "type": "string",
-      "enum": [
-        "none",
-        "buffer_cushion"
-      ]
-    },
-    "surround_texture": {
-      "type": "string"
-    },
     "sfx": {
       "type": "object",
       "additionalProperties": true,
@@ -380,18 +356,6 @@
         }
       }
     },
-    "economy": {
-      "type": "string",
-      "description": "FlavourEconomyRegistry id. Casino registers 'casino'."
-    },
-    "bonus_provider": {
-      "type": "string",
-      "description": "BonusVisualRegistry id (BonusStar + MysteryBox visuals)."
-    },
-    "board_decorator": {
-      "type": "string",
-      "description": "BoardDecoratorRegistry id (extra props painted after wood/markings/pockets)."
-    },
     "tutorial": {
       "type": "object",
       "additionalProperties": true,
@@ -410,454 +374,6 @@
       "items": {
         "$ref": "#/definitions/hintEntry"
       }
-    },
-    "type": {
-      "type": "string",
-      "enum": [
-        "rotor"
-      ],
-      "description": "Sub-game mechanic id (MechanicRegistry). Currently only 'rotor'. Present in games/<flavour>/games/<sub>/manifest.json."
-    },
-    "ring_count": {
-      "type": "integer",
-      "minimum": 1,
-      "maximum": 5
-    },
-    "segment_count": {
-      "type": "integer",
-      "minimum": 2
-    },
-    "presentation": {
-      "type": "string",
-      "enum": [
-        "mechanical",
-        "glass_covered"
-      ]
-    },
-    "outer_segments": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "mid_segments": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "inner_segments": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "ring_1_segments": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "ring_2_segments": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "ring_3_segments": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "outer_spin_secs": {
-      "type": "number"
-    },
-    "mid_spin_secs": {
-      "type": "number"
-    },
-    "inner_spin_secs": {
-      "type": "number"
-    },
-    "ring_1_spin_secs": {
-      "type": "number"
-    },
-    "ring_2_spin_secs": {
-      "type": "number"
-    },
-    "ring_3_spin_secs": {
-      "type": "number"
-    },
-    "hub_spin_secs": {
-      "type": "number"
-    },
-    "ghost_hold_secs": {
-      "type": "number"
-    },
-    "icons_dir": {
-      "type": "string",
-      "description": "Game-folder-relative icon folder (e.g. 'assets/images/'). Loader prefixes 'games/<id>/' before the cascade resolver."
-    },
-    "outer_icons_dir": {
-      "type": "string",
-      "description": "Game-folder-relative override for ring 0."
-    },
-    "inner_icons_dir": {
-      "type": "string",
-      "description": "Game-folder-relative override for inner rings."
-    },
-    "stroke_texture": {
-      "type": "string",
-      "description": "Flavour-root-relative or absolute res:// path. Shared across sub-games via the asset cascade."
-    },
-    "arrow_image": {
-      "type": "string",
-      "description": "Printed pointer artwork (textured quad). Missing -> procedural brass triangle."
-    },
-    "hub_image": {
-      "type": "string",
-      "description": "Square PNG used as the hub face texture. The circular hub mesh clips it automatically."
-    },
-    "outer_image": {
-      "type": "string",
-      "description": "Pre-rendered disc texture for the outer ring (wedge backgrounds + icons + dividers baked together)."
-    },
-    "mid_image": {
-      "type": "string",
-      "description": "Pre-rendered disc texture for the middle ring (3-ring rotors only \u2014 ring_count >= 3)."
-    },
-    "inner_image": {
-      "type": "string",
-      "description": "Pre-rendered disc texture for the innermost ring (ring_count >= 2)."
-    },
-    "well_glass": {
-      "type": "string",
-      "description": "Well glass-cap override: 'smoked' / 'none'. Empty/absent \u2192 derived from presentation. Decouples the glass cover from presentation mode."
-    },
-    "lock_sfx": {
-      "type": "string"
-    },
-    "arrow_image_scale": {
-      "type": "number",
-      "description": "Quad side length in hub-radius units. Default 1.6. Only consumed when arrow_image is set."
-    },
-    "arrow_image_z_offset_frac": {
-      "type": "number",
-      "description": "+Z shift in hub-radius units to line a PNG's painted hub-ring up with the engine hub. Default 0."
-    },
-    "arrow_image_below_disc": {
-      "type": "boolean",
-      "description": "When true, draw the arrow under the wedge face so the disc hides most of the hub-graphic and only the pointer finger sticks out. Default false."
-    },
-    "outer_image_rotation_rad": {
-      "type": "number",
-      "description": "Static rotation applied to outer_image so a manifest-supplied PNG can be aligned with the engine's wedge boundaries without re-exporting. Default 0."
-    },
-    "icon_passthrough_color": {
-      "type": "boolean"
-    },
-    "icon_shader_clip": {
-      "type": "boolean"
-    },
-    "bake_icons_into_wedge": {
-      "type": "boolean"
-    },
-    "icon_flip_180": {
-      "type": "boolean"
-    },
-    "icon_rotation_deg": {
-      "type": "number"
-    },
-    "icon_size_fraction": {
-      "type": "number",
-      "minimum": 0.1,
-      "maximum": 2.0
-    },
-    "icon_radial_fraction": {
-      "type": "number",
-      "minimum": 0,
-      "maximum": 1
-    },
-    "icon_tint": {
-      "type": "string",
-      "pattern": "^#[0-9A-Fa-f]{6}$"
-    },
-    "hub_radius_fraction": {
-      "type": "number",
-      "minimum": 0,
-      "maximum": 0.95
-    },
-    "well_radius_fraction": {
-      "type": "number",
-      "description": "Desired well outer radius as a fraction of half the board's outer-circle diameter. Missing -> engine default = centre-rose marking size (encloses the starting coin pack). Casino uses 1.665 (the rotor IS the table)."
-    },
-    "ring_radial_weights": {
-      "type": "array",
-      "items": {
-        "type": "number",
-        "minimum": 0
-      }
-    },
-    "ring_shader_clips": {
-      "type": "array",
-      "items": {
-        "type": "boolean"
-      }
-    },
-    "wild": {
-      "type": "string",
-      "description": "Segment id treated as a wild substitute by tally patterns. Field name MUST be 'wild' (not 'wild_icon'; the path resolver mangles *_icon as an asset path)."
-    },
-    "suit_rank": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "default_award": {
-      "type": "integer"
-    },
-    "payout_patterns": {
-      "type": "array",
-      "items": {
-        "$ref": "#/definitions/payoutPattern"
-      },
-      "description": "Ordered scoring chain. Resolver walks entries; first non-zero (or -1 = push) wins, else default_award. Award semantics: >0 = win multiplier (stake * (1 + award)), -1 = push (refund), 0 / missing = no match -> next pattern."
-    },
-    "disperse_rotation_rad": {
-      "type": "number"
-    },
-    "disperse_duration_sec": {
-      "type": "number"
-    },
-    "mechanic_defaults": {
-      "type": "object",
-      "additionalProperties": true,
-      "description": "Arcade flavour-root block (e.g. games/casino/manifest.json) whose keys are inherited by every child sub-game manifest under games/. Child manifests override per-key. Same key shape as a sub-game's rotor params; commonly lifts type/presentation/icon_passthrough_color/bake_icons_into_wedge."
-    },
-    "mechanic": {
-      "type": "object",
-      "additionalProperties": true,
-      "description": "Top-level mechanic block authored on a casual/icf LEAF (NOT on an arcade leaf \u2014 arcade leaves auto-discover mechanics from games/<sub>/manifest.json). Same shape as a sub-game manifest's rotor params. Lets a non-arcade flavour (e.g. funfair) declare a rotor on the centre rose without inheriting the arcade overlay / orbit / surround bundle. RulesFlavour.RosetteMechanic reads this lazily so spinner state never leaks match->match.",
-      "properties": {
-        "type": {
-          "type": "string",
-          "enum": [
-            "rotor"
-          ]
-        },
-        "ring_count": {
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 5
-        },
-        "segment_count": {
-          "type": "integer",
-          "minimum": 2
-        },
-        "presentation": {
-          "type": "string",
-          "enum": [
-            "mechanical",
-            "glass_covered"
-          ]
-        },
-        "outer_segments": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "mid_segments": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "inner_segments": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "ring_1_segments": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "ring_2_segments": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "ring_3_segments": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "outer_spin_secs": {
-          "type": "number"
-        },
-        "mid_spin_secs": {
-          "type": "number"
-        },
-        "inner_spin_secs": {
-          "type": "number"
-        },
-        "ring_1_spin_secs": {
-          "type": "number"
-        },
-        "ring_2_spin_secs": {
-          "type": "number"
-        },
-        "ring_3_spin_secs": {
-          "type": "number"
-        },
-        "hub_spin_secs": {
-          "type": "number"
-        },
-        "ghost_hold_secs": {
-          "type": "number"
-        },
-        "default_award": {
-          "type": "integer"
-        },
-        "payout_patterns": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/payoutPattern"
-          }
-        },
-        "icons_dir": {
-          "type": "string"
-        },
-        "outer_icons_dir": {
-          "type": "string"
-        },
-        "inner_icons_dir": {
-          "type": "string"
-        },
-        "stroke_texture": {
-          "type": "string"
-        },
-        "arrow_image": {
-          "type": "string",
-          "description": "Printed pointer artwork."
-        },
-        "hub_image": {
-          "type": "string",
-          "description": "Square PNG used as the hub face texture. The circular hub mesh clips it automatically."
-        },
-        "outer_image": {
-          "type": "string",
-          "description": "Pre-rendered disc texture for the outer ring."
-        },
-        "mid_image": {
-          "type": "string",
-          "description": "Pre-rendered disc texture for the middle ring (ring_count >= 3)."
-        },
-        "inner_image": {
-          "type": "string",
-          "description": "Pre-rendered disc texture for the innermost ring (ring_count >= 2)."
-        },
-        "well_glass": {
-          "type": "string",
-          "description": "Well glass-cap override: 'smoked' / 'none'. Empty/absent \u2192 derived from presentation."
-        },
-        "lock_sfx": {
-          "type": "string"
-        },
-        "arrow_image_scale": {
-          "type": "number",
-          "description": "Quad side length in hub-radius units. Default 1.6."
-        },
-        "arrow_image_z_offset_frac": {
-          "type": "number",
-          "description": "+Z shift in hub-radius units. Default 0."
-        },
-        "arrow_image_below_disc": {
-          "type": "boolean",
-          "description": "Draw arrow under the wedge face. Default false."
-        },
-        "outer_image_rotation_rad": {
-          "type": "number",
-          "description": "Static rotation applied to outer_image. Default 0."
-        },
-        "icon_passthrough_color": {
-          "type": "boolean"
-        },
-        "icon_shader_clip": {
-          "type": "boolean"
-        },
-        "bake_icons_into_wedge": {
-          "type": "boolean"
-        },
-        "icon_flip_180": {
-          "type": "boolean"
-        },
-        "icon_rotation_deg": {
-          "type": "number"
-        },
-        "icon_size_fraction": {
-          "type": "number",
-          "minimum": 0.1,
-          "maximum": 2.0
-        },
-        "icon_radial_fraction": {
-          "type": "number",
-          "minimum": 0,
-          "maximum": 1
-        },
-        "icon_tint": {
-          "type": "string",
-          "pattern": "^#[0-9A-Fa-f]{6}$"
-        },
-        "hub_radius_fraction": {
-          "type": "number",
-          "minimum": 0,
-          "maximum": 0.95
-        },
-        "well_radius_fraction": {
-          "type": "number",
-          "description": "Default = centre-rose marking size. Casino uses 1.665."
-        },
-        "ring_radial_weights": {
-          "type": "array",
-          "items": {
-            "type": "number",
-            "minimum": 0
-          }
-        },
-        "ring_shader_clips": {
-          "type": "array",
-          "items": {
-            "type": "boolean"
-          }
-        },
-        "wild": {
-          "type": "string"
-        },
-        "suit_rank": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "disperse_rotation_rad": {
-          "type": "number"
-        },
-        "disperse_duration_sec": {
-          "type": "number"
-        }
-      }
-    },
-    "surround_color": {
-      "type": "string",
-      "pattern": "^#[0-9A-Fa-f]{6}$",
-      "description": "Hue+tone hex multiplied over the surround's grayscale grain (casino near-black). Absent = no tint."
     },
     "corner_cap_color": {
       "type": "string",
@@ -923,7 +439,7 @@
     "coinSet": {
       "type": "object",
       "additionalProperties": true,
-      "description": "Arcade leaves require white/black/queen/striker. icf/casual leaves treat the whole block as optional; missing fields fall back to IFlavour.DefaultCoins.",
+      "description": "icf/casual leaves treat the whole block as optional; missing fields fall back to IFlavour.DefaultCoins.",
       "properties": {
         "white": {
           "type": "string",
@@ -1064,29 +580,6 @@
         },
         "priority": {
           "type": "integer"
-        }
-      }
-    },
-    "payoutPattern": {
-      "type": "object",
-      "additionalProperties": true,
-      "required": [
-        "type"
-      ],
-      "description": "Each entry is dispatched on 'type' to a PayoutPatternRegistry entry. Schema validates only the discriminator; per-pattern params are passed through.",
-      "properties": {
-        "type": {
-          "type": "string",
-          "enum": [
-            "n_of_a_kind",
-            "two_pair",
-            "total_lookup",
-            "card_total",
-            "team_dim_match",
-            "flush",
-            "full_house",
-            "straight"
-          ]
         }
       }
     }

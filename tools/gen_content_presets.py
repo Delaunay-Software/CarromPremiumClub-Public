@@ -13,9 +13,7 @@ its deepest owning node (mirrors FlavourPath's cascade so nothing duplicates):
 
   common          games/ root            (manifest.json, _schema/**)
   purist-common   games/purist/ root     (group manifest + shared rules/poster)
-  casino-common   games/casino/ root     (flavour manifest + shared assets)
-  <leaf>          games/purist/games/<leaf>/**   (icf, funfair, riviera, woodland)
-  casino-<sub>    games/casino/games/<sub>/**    (blackjack, slots, roulette, ...)
+  <leaf>          games/purist/games/<leaf>/**   (icf, funfair, riviera, woodland, cafe)
 
 The platform presets (Windows/macOS/etc.) are preserved verbatim; only presets
 whose name starts with "Content" are replaced. Writes a sibling packs.json
@@ -70,12 +68,7 @@ def pack_for(rel: str) -> str:
     seg = rel.split("/")
     top = seg[0]
     base, is_leaf = None, False
-    if top == "casino":
-        if len(seg) >= 3 and seg[1] == "games":
-            base, is_leaf = f"casino-{seg[2]}", True
-        else:
-            base = "casino-common"
-    elif top == "purist":
+    if top == "purist":
         if len(seg) >= 3 and seg[1] == "games":
             base, is_leaf = seg[2], True          # leaf: icf / funfair / riviera / woodland / cafe
         else:
@@ -89,7 +82,7 @@ def pack_for(rel: str) -> str:
 
 def tier_for(pack: str) -> str:
     # -common group packs + every -card pack mount at boot; heavy leaf packs lazily.
-    if pack in ("common", "purist-common", "casino-common") or pack.endswith("-card"):
+    if pack in ("common", "purist-common") or pack.endswith("-card"):
         return "common"
     return "flavour"                              # mounted when its flavour is played
 
