@@ -8,7 +8,7 @@
   "properties": {
     "id": {
       "type": "string",
-      "description": "Stable identifier. Must equal the folder name for arcade leaves. Defaults to the folder name when omitted."
+      "description": "Stable identifier. Defaults to the folder name when omitted."
     },
     "title": {
       "type": "string",
@@ -30,7 +30,7 @@
     "card_color": {
       "type": "string",
       "pattern": "^#[0-9A-Fa-f]{6}$",
-      "description": "Row-1 carousel card gradient base colour. Absent \u2192 the accent. Read by FlavourLoader -> Node.CardColor (casino uses this)."
+      "description": "Row-1 carousel card gradient base colour. Absent \u2192 the accent. Read by FlavourLoader -> Node.CardColor."
     },
     "card_texture": {
       "type": "string",
@@ -161,7 +161,7 @@
     },
     "outer_bullnose": {
       "type": "boolean",
-      "description": "Bullnose the frame's outer face. Default true (off when a surround abuts the outer face). FrameOuterBullnose."
+      "description": "Bullnose the frame's outer face. Default true. FrameOuterBullnose."
     },
     "reflection_probe": {
       "type": "boolean",
@@ -324,10 +324,6 @@
     "markings": {
       "$ref": "#/definitions/markingSet"
     },
-    "indicator_color": {
-      "type": "string",
-      "pattern": "^#[0-9A-Fa-f]{6}$"
-    },
     "sfx": {
       "type": "object",
       "additionalProperties": true,
@@ -340,18 +336,6 @@
           "type": "string"
         },
         "pocketed": {
-          "type": "string"
-        },
-        "star_hit": {
-          "type": "string"
-        },
-        "giftbox_hit": {
-          "type": "string"
-        },
-        "collectable_hit": {
-          "type": "string"
-        },
-        "bonus": {
           "type": "string"
         }
       }
