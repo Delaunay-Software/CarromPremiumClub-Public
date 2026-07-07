@@ -1,0 +1,26 @@
+{
+  "id": "funhouse",
+  "title": "Funhouse",
+  "tagline": "Smaller board, relaxed rules",
+  "rule_set": "casual",
+  "accent": "#FF8C42",
+  "turn_marker": {
+    "scale": 1.0,
+    "offset_y": -93
+  },
+  "surface_material": "ivory",
+  "frame_material": "mahogany",
+  "frame_finish": "gloss",
+  "board_size": "mini",
+  "glass_top": false,
+  "lighting": {
+    "main_energy": 1.4,
+    "ambient_color": "#5A4E42",
+    "ambient_energy": 1.0
+  },
+  "markings": {
+    "line_color": "#740005",
+    "spot_color": "#740005",
+    "pocket_cup_color": "#740005"
+  }
+}

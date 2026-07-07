@@ -1,11 +1,11 @@
 {
   "schema": 1,
   "packs": {
-    "cafe": {
+    "rainy_day_cafe": {
       "tier": "flavour",
       "files": 8
     },
-    "cafe-card": {
+    "rainy_day_cafe-card": {
       "tier": "common",
       "files": 2
     },
@@ -33,19 +33,19 @@
       "tier": "common",
       "files": 2
     },
-    "vintage_parlour": {
+    "funhouse": {
       "tier": "flavour",
       "files": 24
     },
-    "vintage_parlour-card": {
+    "funhouse-card": {
       "tier": "common",
       "files": 2
     },
-    "woodland": {
+    "woodland_retreat": {
       "tier": "flavour",
       "files": 5
     },
-    "woodland-card": {
+    "woodland_retreat-card": {
       "tier": "common",
       "files": 2
     }
