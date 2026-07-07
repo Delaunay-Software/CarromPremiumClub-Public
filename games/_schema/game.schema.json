@@ -339,6 +339,44 @@
       "type": "string",
       "description": "Optional gameplay panorama path override. Convention default (all leaves): assets/images/backdrop.{jpg,png} at the node root."
     },
+    "backdrop_fx": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Animated overlay: looping effect clips composited into equirect UV regions of the backdrop (fire in a hearth, surf in a window). Up to 4 regions, each naming an effect from the library. Medium+ graphics only. Absent → static backdrop.",
+      "properties": {
+        "light": {
+          "type": "number", "minimum": 0, "maximum": 1,
+          "description": "How much the overlays flicker in reflections/IBL. 0 = visible only. Default 1.0."
+        },
+        "regions": {
+          "type": "array", "maxItems": 4,
+          "description": "Up to 4 effect regions in equirect UV.",
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "properties": {
+              "effect": { "type": "string", "description": "Effect id from assets/environments/effects/<id>.ogv (engine + flavour). Absent → 'fire'." },
+              "poly": {
+                "type": "array", "items": { "type": "number", "minimum": 0, "maximum": 1 },
+                "minItems": 6, "maxItems": 16,
+                "description": "N equirect-UV points [u0,v0,u1,v1,…] (3–8 points, in order around the region). Preferred — traces a curved fireplace/window outline. Placed via the F12 crosshair tool (click points, right-click to finish)."
+              },
+              "quad": {
+                "type": "array", "items": { "type": "number", "minimum": 0, "maximum": 1 },
+                "minItems": 8, "maxItems": 8,
+                "description": "4 equirect-UV corners [u0,v0,u1,v1,u2,v2,u3,v3] (in order around the region). Preferred over rect — hugs a perspective-distorted fireplace/window. Placed via the F12 crosshair tool (click 4 corners)."
+              },
+              "rect": {
+                "type": "array", "items": { "type": "number", "minimum": 0, "maximum": 1 },
+                "minItems": 4, "maxItems": 4,
+                "description": "Axis-aligned [u0,v0,u1,v1] equirect bounds (0..1). Back-compat; expanded to a box quad if no `quad` is given."
+              },
+              "blend": { "type": "string", "enum": ["screen", "add", "alpha"], "description": "Composite mode. Default screen." },
+              "intensity": { "type": "number", "description": "Brightness multiplier. Default 1.0." }
+            }
+          }
+        }
+      }
+    },
     "turn_marker": {
       "type": "object",
       "additionalProperties": false,
