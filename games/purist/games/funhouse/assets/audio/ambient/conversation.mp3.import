@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://bqm4lrbo8xjns"
-path="res://.godot/imported/conversation.mp3-de401776ca689bb44e11cddffd5070fe.mp3str"
+path="res://.godot/imported/conversation.mp3-c86173cc642b7d4c9fdeb4c947c25780.mp3str"
 
 [deps]
 
-source_file="res://games/purist/games/vintage_parlour/assets/audio/ambient/conversation.mp3"
-dest_files=["res://.godot/imported/conversation.mp3-de401776ca689bb44e11cddffd5070fe.mp3str"]
+source_file="res://games/purist/games/funhouse/assets/audio/ambient/conversation.mp3"
+dest_files=["res://.godot/imported/conversation.mp3-c86173cc642b7d4c9fdeb4c947c25780.mp3str"]
 
 [params]
 

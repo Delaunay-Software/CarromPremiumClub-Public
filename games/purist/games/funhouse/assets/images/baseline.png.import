@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cshthc1d01ton"
-path="res://.godot/imported/baseline.png-36d8d4689d3030746b40df78dceeb185.ctex"
+path="res://.godot/imported/baseline.png-1087a941670d2c3bb5451e494fc28e90.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://games/purist/games/vintage_parlour/assets/images/baseline.png"
-dest_files=["res://.godot/imported/baseline.png-36d8d4689d3030746b40df78dceeb185.ctex"]
+source_file="res://games/purist/games/funhouse/assets/images/baseline.png"
+dest_files=["res://.godot/imported/baseline.png-1087a941670d2c3bb5451e494fc28e90.ctex"]
 
 [params]
 

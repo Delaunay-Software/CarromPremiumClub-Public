@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ky7g77uauank"
-path="res://.godot/imported/board_topdown.png-fbee66ebefc5b7f3547ea7104f53f39d.ctex"
+path="res://.godot/imported/board_topdown.png-d9bb57a6f3c662606e4da9223d804771.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://games/purist/games/vintage_parlour/assets/images/board_topdown.png"
-dest_files=["res://.godot/imported/board_topdown.png-fbee66ebefc5b7f3547ea7104f53f39d.ctex"]
+source_file="res://games/purist/games/funhouse/assets/images/board_topdown.png"
+dest_files=["res://.godot/imported/board_topdown.png-d9bb57a6f3c662606e4da9223d804771.ctex"]
 
 [params]
 

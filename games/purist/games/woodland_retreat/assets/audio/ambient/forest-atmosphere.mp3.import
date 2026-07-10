@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://w7it6v5qc681"
-path="res://.godot/imported/forest-atmosphere.mp3-b085bac33feb666760160b325dc1f3fa.mp3str"
+path="res://.godot/imported/forest-atmosphere.mp3-6eb5b3ec8b40c4724db7335cd49e2c83.mp3str"
 
 [deps]
 
-source_file="res://games/purist/games/woodland/assets/audio/ambient/forest-atmosphere.mp3"
-dest_files=["res://.godot/imported/forest-atmosphere.mp3-b085bac33feb666760160b325dc1f3fa.mp3str"]
+source_file="res://games/purist/games/woodland_retreat/assets/audio/ambient/forest-atmosphere.mp3"
+dest_files=["res://.godot/imported/forest-atmosphere.mp3-6eb5b3ec8b40c4724db7335cd49e2c83.mp3str"]
 
 [params]
 

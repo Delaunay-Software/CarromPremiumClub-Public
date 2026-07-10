@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bxrxo0wwg41oq"
-path="res://.godot/imported/poster.png-6a6a7bb82f95b4ba432f0be059e88d7a.ctex"
+path="res://.godot/imported/poster.png-2e046ed94342369fdbe2a0e7a3dfb433.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://games/purist/games/woodland/assets/images/poster.png"
-dest_files=["res://.godot/imported/poster.png-6a6a7bb82f95b4ba432f0be059e88d7a.ctex"]
+source_file="res://games/purist/games/woodland_retreat/assets/images/poster.png"
+dest_files=["res://.godot/imported/poster.png-2e046ed94342369fdbe2a0e7a3dfb433.ctex"]
 
 [params]
 

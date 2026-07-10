@@ -1,21 +1,21 @@
 {
   "schema": 1,
   "packs": {
-    "rainy_day_cafe": {
-      "tier": "flavour",
-      "files": 8
-    },
-    "rainy_day_cafe-card": {
-      "tier": "common",
-      "files": 2
-    },
     "common": {
       "tier": "common",
       "files": 3
     },
+    "funhouse": {
+      "tier": "flavour",
+      "files": 24
+    },
+    "funhouse-card": {
+      "tier": "common",
+      "files": 2
+    },
     "icf": {
       "tier": "flavour",
-      "files": 11
+      "files": 12
     },
     "icf-card": {
       "tier": "common",
@@ -25,19 +25,19 @@
       "tier": "common",
       "files": 15
     },
-    "riviera": {
+    "rainy_day_cafe": {
       "tier": "flavour",
-      "files": 18
+      "files": 10
     },
-    "riviera-card": {
+    "rainy_day_cafe-card": {
       "tier": "common",
       "files": 2
     },
-    "funhouse": {
+    "riviera": {
       "tier": "flavour",
-      "files": 24
+      "files": 20
     },
-    "funhouse-card": {
+    "riviera-card": {
       "tier": "common",
       "files": 2
     },

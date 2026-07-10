@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://cnykcbl6s8mql"
-path="res://.godot/imported/chair.glb-1b3ae4344ef2d6a8a2f976b7c550572b.scn"
+path="res://.godot/imported/chair.glb-2385261e1663f9c88df707a12b7ab371.scn"
 
 [deps]
 
-source_file="res://games/purist/games/woodland/assets/meshes/chair.glb"
-dest_files=["res://.godot/imported/chair.glb-1b3ae4344ef2d6a8a2f976b7c550572b.scn"]
+source_file="res://games/purist/games/woodland_retreat/assets/meshes/chair.glb"
+dest_files=["res://.godot/imported/chair.glb-2385261e1663f9c88df707a12b7ab371.scn"]
 
 [params]
 

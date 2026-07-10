@@ -14,6 +14,9 @@
   "surface_roughness_scale": 0.2,
   "frame_material": "ivory",
   "frame_finish": "satin",
+  "grunge": {
+    "frame": { "patina": 0, "grime": 0, "powder": 0, "wear": 0 }
+  },
   "corner_style": "rounded",
   "corner_cap_mesh": "outer_corner_cap.glb",
   "corner_cap_material": "brass",

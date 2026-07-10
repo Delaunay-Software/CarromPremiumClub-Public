@@ -9,8 +9,8 @@
     "offset_y": -93
   },
   "surface_material": "ivory",
-  "frame_material": "mahogany",
-  "frame_finish": "gloss",
+  "frame_material": "rough",
+  "frame_finish": "piano_gloss",
   "board_size": "mini",
   "glass_top": false,
   "lighting": {
@@ -22,5 +22,6 @@
     "line_color": "#740005",
     "spot_color": "#740005",
     "pocket_cup_color": "#740005"
-  }
+  },
+  "frame_tint": "#533f37"
 }

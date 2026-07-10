@@ -47,6 +47,9 @@
     },
     "table": {
       "patina": 0.2, "grime": 0.2, "powder": 0.1, "wear": 0.2
+    },
+    "frame": {
+      "patina": 0.2, "grime": 0.1, "powder": 0, "wear": 0.6
     }
   }
 }

@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://m70f8gupfa8k"
-path="res://.godot/imported/poster.png-90fe2715d594d4674ea5934846a6bd1c.ctex"
+path="res://.godot/imported/poster.png-84225eb8059e95147f812dddd178b29f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://games/purist/games/cafe/assets/images/poster.png"
-dest_files=["res://.godot/imported/poster.png-90fe2715d594d4674ea5934846a6bd1c.ctex"]
+source_file="res://games/purist/games/rainy_day_cafe/assets/images/poster.png"
+dest_files=["res://.godot/imported/poster.png-84225eb8059e95147f812dddd178b29f.ctex"]
 
 [params]
 

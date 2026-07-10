@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cs4aaet7u04bk"
-path="res://.godot/imported/backdrop.png-d579c12d8fda9db3e6df4849d0d3ae9a.ctex"
+path="res://.godot/imported/backdrop.png-6ce3d824b4a3ed3089c6be2d406a12c2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://games/purist/games/vintage_parlour/assets/images/backdrop.png"
-dest_files=["res://.godot/imported/backdrop.png-d579c12d8fda9db3e6df4849d0d3ae9a.ctex"]
+source_file="res://games/purist/games/funhouse/assets/images/backdrop.png"
+dest_files=["res://.godot/imported/backdrop.png-6ce3d824b4a3ed3089c6be2d406a12c2.ctex"]
 
 [params]
 

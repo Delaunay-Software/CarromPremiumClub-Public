@@ -4,10 +4,6 @@ dist/
 export_presets.cfg.*.bak
 *_priv.pem
 
-# Blazor content-admin tool build output
-admin/bin/
-admin/obj/
-
 # Godot Extract-Textures outputs (regenerated on GLB import) — keep .glb, drop extracted maps
 games/**/assets/meshes/*.png
 games/**/assets/meshes/*.jpg

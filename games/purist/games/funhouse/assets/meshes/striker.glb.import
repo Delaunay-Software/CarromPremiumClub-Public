@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://b48m8yhobsslh"
-path="res://.godot/imported/striker.glb-dd3069923f8d02c370dd47c9c51c6a62.scn"
+path="res://.godot/imported/striker.glb-2a91e1d1ab5f66c24f242026d5057e10.scn"
 
 [deps]
 
-source_file="res://games/purist/games/vintage_parlour/assets/meshes/striker.glb"
-dest_files=["res://.godot/imported/striker.glb-dd3069923f8d02c370dd47c9c51c6a62.scn"]
+source_file="res://games/purist/games/funhouse/assets/meshes/striker.glb"
+dest_files=["res://.godot/imported/striker.glb-2a91e1d1ab5f66c24f242026d5057e10.scn"]
 
 [params]
 

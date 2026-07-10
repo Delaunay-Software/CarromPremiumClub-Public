@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://dc0sfs4dugwop"
-path="res://.godot/imported/ambience.mp3-309a5f8764df5ddad8d5b9ca8354bb12.mp3str"
+path="res://.godot/imported/ambience.mp3-c462a9509976bf6cbe435b190219dccf.mp3str"
 
 [deps]
 
-source_file="res://games/purist/games/cafe/assets/audio/ambient/ambience.mp3"
-dest_files=["res://.godot/imported/ambience.mp3-309a5f8764df5ddad8d5b9ca8354bb12.mp3str"]
+source_file="res://games/purist/games/rainy_day_cafe/assets/audio/ambient/ambience.mp3"
+dest_files=["res://.godot/imported/ambience.mp3-c462a9509976bf6cbe435b190219dccf.mp3str"]
 
 [params]
 

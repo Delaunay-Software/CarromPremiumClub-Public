@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://ieipe2upla28"
-path="res://.godot/imported/coffee-machine.mp3-cf4642983b75bca3a06e461988d98fa3.mp3str"
+path="res://.godot/imported/coffee-machine.mp3-ded8fa4cd5ac6eb10cec6d1547baf035.mp3str"
 
 [deps]
 
-source_file="res://games/purist/games/cafe/assets/audio/audience/idle/coffee-machine.mp3"
-dest_files=["res://.godot/imported/coffee-machine.mp3-cf4642983b75bca3a06e461988d98fa3.mp3str"]
+source_file="res://games/purist/games/rainy_day_cafe/assets/audio/audience/idle/coffee-machine.mp3"
+dest_files=["res://.godot/imported/coffee-machine.mp3-ded8fa4cd5ac6eb10cec6d1547baf035.mp3str"]
 
 [params]
 

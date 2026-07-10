@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://bseofdroabgci"
-path="res://.godot/imported/foul_3.mp3-647fc59c2751adacdaa9bdb50bc50053.mp3str"
+path="res://.godot/imported/foul_3.mp3-1f33c7a769805de9c388eb91ef5a0841.mp3str"
 
 [deps]
 
-source_file="res://games/purist/games/vintage_parlour/assets/audio/foul/foul_3.mp3"
-dest_files=["res://.godot/imported/foul_3.mp3-647fc59c2751adacdaa9bdb50bc50053.mp3str"]
+source_file="res://games/purist/games/funhouse/assets/audio/foul/foul_3.mp3"
+dest_files=["res://.godot/imported/foul_3.mp3-1f33c7a769805de9c388eb91ef5a0841.mp3str"]
 
 [params]
 

@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://l6l74y7p3gue"
-path="res://.godot/imported/turn_marker.glb-ccd0356aefad7b168d749f790d4f1c7a.scn"
+path="res://.godot/imported/turn_marker.glb-03c9337e2ee4a48c2c3a087eb4cff25d.scn"
 
 [deps]
 
-source_file="res://games/purist/games/vintage_parlour/assets/meshes/turn_marker.glb"
-dest_files=["res://.godot/imported/turn_marker.glb-ccd0356aefad7b168d749f790d4f1c7a.scn"]
+source_file="res://games/purist/games/funhouse/assets/meshes/turn_marker.glb"
+dest_files=["res://.godot/imported/turn_marker.glb-03c9337e2ee4a48c2c3a087eb4cff25d.scn"]
 
 [params]
 

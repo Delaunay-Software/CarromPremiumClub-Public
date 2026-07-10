@@ -3,12 +3,12 @@
 importer="mp3"
 type="AudioStreamMP3"
 uid="uid://c76r7ef1xxgj2"
-path="res://.godot/imported/pouring-water-into-a-glass.mp3-c06d9a7aa280562283af85b0f8ecbdb5.mp3str"
+path="res://.godot/imported/pouring-water-into-a-glass.mp3-6bd063e93221c08803d0fc396506217c.mp3str"
 
 [deps]
 
-source_file="res://games/purist/games/cafe/assets/audio/audience/idle/pouring-water-into-a-glass.mp3"
-dest_files=["res://.godot/imported/pouring-water-into-a-glass.mp3-c06d9a7aa280562283af85b0f8ecbdb5.mp3str"]
+source_file="res://games/purist/games/rainy_day_cafe/assets/audio/audience/idle/pouring-water-into-a-glass.mp3"
+dest_files=["res://.godot/imported/pouring-water-into-a-glass.mp3-6bd063e93221c08803d0fc396506217c.mp3str"]
 
 [params]
 

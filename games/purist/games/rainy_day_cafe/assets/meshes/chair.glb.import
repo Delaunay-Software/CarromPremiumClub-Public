@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://dln5i1kn3u62j"
-path="res://.godot/imported/chair.glb-63da2af423a12f95f17aefc2057b9078.scn"
+path="res://.godot/imported/chair.glb-526935712374e03e79f7eb1d38ea1805.scn"
 
 [deps]
 
-source_file="res://games/purist/games/cafe/assets/meshes/chair.glb"
-dest_files=["res://.godot/imported/chair.glb-63da2af423a12f95f17aefc2057b9078.scn"]
+source_file="res://games/purist/games/rainy_day_cafe/assets/meshes/chair.glb"
+dest_files=["res://.godot/imported/chair.glb-526935712374e03e79f7eb1d38ea1805.scn"]
 
 [params]
 
