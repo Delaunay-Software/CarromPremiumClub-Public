@@ -41,6 +41,10 @@ def is_skippable(rel: str) -> bool:
     if rel.endswith(".import") or ext(rel) in SKIP_EXT:
         return True
     parts = rel.split("/")
+    # Authoring / build-tool working files living inside a flavour (e.g. a stall's
+    # tools/stall/ mesh scripts + fabric source scans) — never ship them.
+    if "tools" in parts:
+        return True
     if "assets" in parts and "meshes" in parts and ext(rel) in ("png", "jpg", "jpeg"):
         return True
     return False

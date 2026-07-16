@@ -10,18 +10,119 @@
   },
   "surface_material": "ivory",
   "frame_material": "rough",
-  "frame_finish": "piano_gloss",
   "board_size": "mini",
   "glass_top": false,
+  "ground_plane": false,
   "lighting": {
-    "main_energy": 1.4,
+    "main_energy": 1.15,
     "ambient_color": "#5A4E42",
-    "ambient_energy": 1.0
+    "ambient_energy": 0.6,
+    "lights": [
+      {
+        "name": "Fair1",
+        "rotation": [
+          -11,
+          13,
+          0
+        ],
+        "color": "#FDFFFD",
+        "energy": 1.4,
+        "shadows": true
+      },
+      {
+        "name": "Fair2",
+        "rotation": [
+          -12,
+          -165,
+          0
+        ],
+        "color": "#FFFDE0",
+        "energy": 0.84,
+        "shadows": true
+      },
+      {
+        "name": "Fair3",
+        "rotation": [
+          -13,
+          95,
+          0
+        ],
+        "color": "#FCFFF2",
+        "energy": 0.79
+      },
+      {
+        "name": "Fair4",
+        "rotation": [
+          -3,
+          78,
+          0
+        ],
+        "color": "#FFFEFD",
+        "energy": 0.65
+      },
+      {
+        "name": "Fair5",
+        "rotation": [
+          -5,
+          -23,
+          0
+        ],
+        "color": "#FFFEEC",
+        "energy": 0.63
+      },
+      {
+        "name": "Fair6",
+        "rotation": [
+          -11,
+          175,
+          0
+        ],
+        "color": "#FFFDDE",
+        "energy": 0.59
+      },
+      {
+        "name": "Fair7",
+        "rotation": [
+          -4,
+          -117,
+          0
+        ],
+        "color": "#FFFEFB",
+        "energy": 0.57
+      }
+    ]
   },
   "markings": {
     "line_color": "#740005",
     "spot_color": "#740005",
     "pocket_cup_color": "#740005"
   },
-  "frame_tint": "#533f37"
+  "props": [
+    {
+      "mesh": "funfair_stall.glb",
+      "pos": [
+        -0.7,
+        -85,
+        -9.9
+      ],
+      "yaw": 0,
+      "scale": 1
+    }
+  ],
+  "realism": {
+    "fog": {
+      "depth_begin": 560.0,
+      "depth_end": 1400.0
+    }
+  },
+  "grunge": {
+    "board": {
+      "powder": 0.0,
+      "patina": 1.8,
+      "grime": 1.0,
+      "wear": 1.0
+    }
+  },
+  "frame_finish": "satin",
+  "frame_tint": "#561409"
 }

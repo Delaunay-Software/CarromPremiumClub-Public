@@ -5,7 +5,7 @@ export_presets.cfg.*.bak
 *_priv.pem
 
 # Godot Extract-Textures outputs (regenerated on GLB import) — keep .glb, drop extracted maps
-games/**/assets/meshes/*.png
-games/**/assets/meshes/*.jpg
-games/**/assets/meshes/*.png.import
-games/**/assets/meshes/*.jpg.import
+games/**/assets/meshes/**/*.png
+games/**/assets/meshes/**/*.jpg
+games/**/assets/meshes/**/*.png.import
+games/**/assets/meshes/**/*.jpg.import

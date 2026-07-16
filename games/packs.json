@@ -7,7 +7,7 @@
     },
     "funhouse": {
       "tier": "flavour",
-      "files": 24
+      "files": 26
     },
     "funhouse-card": {
       "tier": "common",
@@ -27,7 +27,7 @@
     },
     "rainy_day_cafe": {
       "tier": "flavour",
-      "files": 10
+      "files": 8
     },
     "rainy_day_cafe-card": {
       "tier": "common",
@@ -35,7 +35,7 @@
     },
     "riviera": {
       "tier": "flavour",
-      "files": 20
+      "files": 19
     },
     "riviera-card": {
       "tier": "common",
