@@ -622,8 +622,11 @@ def canvas_mat():
     ni.image = bpy.data.images.load(nr); ni.image.colorspace_settings.name = 'Non-Color'
     nm = nt.nodes.new("ShaderNodeNormalMap")
     nt.links.new(ni.outputs["Color"], nm.inputs["Color"]); nt.links.new(nm.outputs["Normal"], b.inputs["Normal"])
-    b.inputs["Coat Weight"].default_value = 0.45        # the waterproof proofing, sitting on the cloth
-    b.inputs["Coat Roughness"].default_value = 0.09
+    # Matte canvas: the glossy clearcoat was mirroring the ring bulbs into blown-white specular streaks
+    # up the tilt (the "glows"). Real weathered tent canvas is near-matte, so drop the coat and keep the
+    # base specular low — the tilt now just RECEIVES the warm bulb light instead of throwing hotspots.
+    b.inputs["Coat Weight"].default_value = 0.0
+    b.inputs["Specular IOR Level"].default_value = 0.15
     return m
 
 
@@ -635,40 +638,6 @@ def _set_nrm_path(st, tag):
     if tag not in _SET_NRM:
         _SET_NRM[tag] = save(downsample(st["nrm"], NRM_TEX), "nrm_set_" + tag, jpeg=False)
     return _SET_NRM[tag]
-
-
-def ground_mat(name):
-    """The tober underfoot: a REAL scan of patchy grass worn through to bare earth
-    (ambientCG Ground037, CC0). Not a tinted wood scan - there is no such thing as a photo of ground
-    in a timber texture, and it showed.
-
-    Grass churned to dirt is the honest fairground: the research is blunt that a fair operates in a
-    quagmire, that mud washes off and is NOT cumulative, and that what is permanent is trodden earth.
-    A clean lawn would be wrong. Untinted - the scan is already the right colour."""
-    d = os.path.join(HERE, "ground_src", "Ground037_2K-JPG_")
-    m = bpy.data.materials.new(name); b = _bsdf(m)
-    # The scan is a bright DAYLIT ground (mean rgb 0.60/0.58/0.34). This is a night fair lit by
-    # near-horizontal stall light, so it has to be knocked well back or it glows.
-    col = load_file(d + "Color.jpg", TEX) * GROUND_VALUE
-    ao = load_file(d + "AmbientOcclusion.jpg", TEX, True)[:, :, 0]
-    # The scan's AO has to be multiplied into the ALBEDO: bake_stall_ao claims the material's
-    # occlusion SLOT for the stall's macro shadow, and the exporter's ORM merge keeps that one - so
-    # anything left in the ORM's R channel is discarded. This is the crevice detail between clumps.
-    col = col * (0.35 + 0.65 * ao)[..., None]
-    rgh = load_file(d + "Roughness.jpg", TEX, True)[:, :, 0]
-    # The scan's own roughness runs 0.25-0.82 (mean 0.46) - that is a WET-looking floor, near polished
-    # plastic at the low end. Trodden earth and dry grass sit ~0.85-0.95, so remap rather than clamp.
-    orm = np.stack([ao, np.clip(0.72 + rgh * 0.26, 0, 1), np.zeros_like(rgh)], -1)   # dielectric, matte
-    tex_node(m, save(col, name + "_col"), "Base Color")
-    orm_node(m, save(orm, name + "_orm"))
-    nt = m.node_tree
-    ni = nt.nodes.new("ShaderNodeTexImage")
-    ni.image = bpy.data.images.load(save(downsample(load_file(d + "NormalGL.jpg", TEX, True), NRM_TEX),
-                                         name + "_nrm", jpeg=False))
-    ni.image.colorspace_settings.name = 'Non-Color'
-    nm = nt.nodes.new("ShaderNodeNormalMap")
-    nt.links.new(ni.outputs["Color"], nm.inputs["Color"]); nt.links.new(nm.outputs["Normal"], b.inputs["Normal"])
-    return m
 
 
 def pbr_mat(name, rgb, st=None, rough_lo=0.42, rough_hi=0.45, metal=0.0):
@@ -702,14 +671,14 @@ M_RUST = pbr_mat("fixing", (0.62, 0.34, 0.18), BRASS, 0.30, 0.55)   # galv breac
 
 
 def glass_mat():
-    """A clear glass orb. It does NOT glow - a uniformly emissive envelope is just a glowing lozenge.
-    The amber filament inside is what reads as a bulb, seen through this."""
+    """The bulb envelope, made EMISSIVE amber. Godot's glTF import doesn't reliably show a tiny emissive
+    filament through an alpha-blended clear-glass orb (it rendered as a dead bead), so the envelope glows
+    directly — an amber lit bulb, opaque, which reads correctly and blooms under the engine's glow."""
     m = bpy.data.materials.new("bulb_glass"); b = _bsdf(m)
-    b.inputs["Base Color"].default_value = (0.96, 0.94, 0.90, 1)
-    b.inputs["Alpha"].default_value = 0.09          # clear glass - you see THROUGH to the filament
-    b.inputs["Roughness"].default_value = 0.03
-    b.inputs["IOR"].default_value = 1.46
-    m.blend_method = 'BLEND'
+    b.inputs["Base Color"].default_value = (1.0, 0.72, 0.34, 1)
+    b.inputs["Emission Color"].default_value = (1.0, 0.66, 0.28, 1)   # amber
+    b.inputs["Emission Strength"].default_value = 12.0
+    b.inputs["Roughness"].default_value = 0.35
     return m
 
 
@@ -721,7 +690,7 @@ def filament_mat():
     m = bpy.data.materials.new("bulb_filament"); b = _bsdf(m)
     b.inputs["Base Color"].default_value = (1.0, 0.72, 0.34, 1)
     b.inputs["Emission Color"].default_value = (1.0, 0.62, 0.22, 1)   # amber
-    b.inputs["Emission Strength"].default_value = 15.0
+    b.inputs["Emission Strength"].default_value = 28.0               # bright glow now the interior is dark
     b.inputs["Roughness"].default_value = 0.4
     return m
 
@@ -734,8 +703,8 @@ M_GLASS, M_FIL = glass_mat(), filament_mat()
 M_BOARD = paint_mat("lampboard", "kingsway_red", ornament="lined", sign=SIGN, shape=(2048, 352))
 M_LEG   = paint_mat("leg", "empire_blue", ornament="none")
 M_GOLD  = pbr_mat("goldleaf", GOLD, BRASS, 0.16, 0.30, 1.0)   # brass casting: the finial
-GROUND_VALUE = 0.42                    # night fair: the scan is daylit and far too bright raw
-M_GROUND = ground_mat("ground")        # real scan: patchy grass worn to earth
+# Ground removed: the stall no longer bakes its own tober — the engine's procedural plywood
+# base_disk (manifest `base_disk`) is the ground it stands on.
 
 
 # ---------------------------------------------------------------- geometry helpers
@@ -819,13 +788,123 @@ for i in range(SIDES):                                   # eaves beam ring, capp
     box(bm, corner(i, R, EAVES_H), corner(i + 1, R, EAVES_H), BEAM_W, BEAM_H)
 obj_from(bm, "Legs", M_LEG)
 
-# ---------------------------------------------------------------- roof: canvas tilt over a rafter frame
+# ---------------------------------------------------------------- metal post-bases
+# Cast-iron shoes bolted to the floor, one per corner post: a wide flange plate on the deck, a socket
+# collar the post seats into, and four corner bolt heads. This is how a real stall is anchored — the
+# posts don't just rest on the ground, they bolt down to it (now the plywood tober).
+M_FEET = pbr_mat("feet", (0.17, 0.18, 0.19), BRASS, 0.30, 0.28, metal=1.0)   # dark galvanised / cast iron
 bm = bmesh.new()
+PLATE, PLATE_H = 0.15, 0.015     # floor flange footprint + thickness
+SOCK,  SOCK_H  = 0.10, 0.13      # socket collar the post seats into (post is POST=0.06 wide)
+BOLT,  BOLT_OFF = 0.018, 0.052   # bolt-head size + offset from the post centre
+for i in range(SIDES):
+    p = corner(i)
+    box(bm, (p.x, p.y, 0.0), (p.x, p.y, PLATE_H), PLATE, PLATE)        # floor flange
+    box(bm, (p.x, p.y, 0.0), (p.x, p.y, SOCK_H),  SOCK,  SOCK)         # socket collar
+    for sx in (-1, 1):
+        for sy in (-1, 1):
+            bx, by = p.x + sx * BOLT_OFF, p.y + sy * BOLT_OFF
+            box(bm, (bx, by, PLATE_H), (bx, by, PLATE_H + 0.012), BOLT, BOLT)   # bolt heads
+obj_from(bm, "MetalFeet", M_FEET, smooth=False)
+
+# ---------------------------------------------------------------- plywood base (the tober it stands on)
+# Radial wedge boards of dark, matte, grungy plywood — the deck the stall bolts down to (replaces the
+# old grass tober). PLY_N boards nearly touching (a few-mm seam), grain running out along each board.
+# Top face at z=0, the same plane the metal feet stand on, so it reads as the ground under the stall.
+def _plywood_mat():
+    """Same wood as the rafters/posts (table.glb 'Painted wood' / wood02), retinted DARK and forced
+    matte — dirty plywood boards trodden for years."""
+    DARK = 0.32
+    m = bpy.data.materials.new("plywood"); b = _bsdf(m)
+    col = np.clip(SCAN["wood02_diffuse"] * DARK, 0, 1)
+    rgh = np.clip(0.80 + (1.0 - SCAN["wood02_glossiness"][:, :, 0]) * 0.18, 0.05, 1.0)   # matte
+    orm = np.stack([np.ones_like(rgh), rgh, np.zeros_like(rgh)], -1)
+    tex_node(m, save(col, "ply_col"), "Base Color"); orm_node(m, save(orm, "ply_orm"))
+    nt = m.node_tree
+    ni = nt.nodes.new("ShaderNodeTexImage")
+    ni.image = bpy.data.images.load(save(SCAN["wood02_normal_opengl"], "ply_nrm", jpeg=False))
+    ni.image.colorspace_settings.name = 'Non-Color'
+    nm = nt.nodes.new("ShaderNodeNormalMap")
+    nt.links.new(ni.outputs["Color"], nm.inputs["Color"]); nt.links.new(nm.outputs["Normal"], b.inputs["Normal"])
+    return m
+M_PLY = _plywood_mat()   # dark, matte plywood in the same wood as the posts/rafters
+bm = bmesh.new(); uvl = bm.loops.layers.uv.verify()
+PLY_N, PLY_R, PLY_HUB, PLY_TH = 12, R + 0.30, 0.16, 0.04
+HG, GT = math.radians(0.06), 0.55                                   # seam half-gap (few mm at the rim); grain tile
+def _pv(a, r, z): return bm.verts.new((math.cos(a) * r, math.sin(a) * r, z))
+for i in range(PLY_N):
+    a0 = i * 2 * math.pi / PLY_N + HG
+    a1 = (i + 1) * 2 * math.pi / PLY_N - HG
+    steps = max(3, int((a1 - a0) / math.radians(4)))
+    ti, to, bi, bo = [], [], [], []
+    for k in range(steps + 1):
+        a = a0 + (a1 - a0) * k / steps
+        ti.append(_pv(a, PLY_HUB, 0.0)); to.append(_pv(a, PLY_R, 0.0))
+        bi.append(_pv(a, PLY_HUB, -PLY_TH)); bo.append(_pv(a, PLY_R, -PLY_TH))
+    for k in range(steps):
+        f = bm.faces.new((ti[k], to[k], to[k + 1], ti[k + 1]))                     # TOP board face
+        # Each wedge is a straight-grained offcut from ONE sheet: the grain runs in a
+        # near-common world direction (NOT rotated to the wedge's own angle, which fanned
+        # it radially toward the hub), with a few degrees of deterministic per-board jitter
+        # so the boards read as separately cut rather than a single seamless CG sheet.
+        jit = (math.sin((i + 1) * 12.9898) * 43758.5453) % 1.0                    # deterministic 0..1 per wedge
+        th  = (jit - 0.5) * math.radians(30)                                      # ±15° straight-grain jitter
+        ct, st = math.cos(-th), math.sin(-th)
+        for lp in f.loops:                                                        # planar, repeat 3, jittered + shifted per wedge:
+            x, y = lp.vert.co.x, lp.vert.co.y
+            rx, ry = x * ct - y * st, x * st + y * ct
+            lp[uvl].uv = ((rx / PLY_R + 1) * 1.5 + i * 0.37, (ry / PLY_R + 1) * 1.5)
+        bm.faces.new((to[k], bo[k], bo[k + 1], to[k + 1]))            # outer rim
+        bm.faces.new((bi[k], bi[k + 1], bo[k + 1], bo[k]))            # bottom
+    bm.faces.new((ti[0], to[0], bo[0], bi[0]))                        # seam wall (a0)
+    bm.faces.new((ti[-1], to[-1], bo[-1], bi[-1]))                    # seam wall (a1)
+# hub cap: close the centre hole the wedges leave (no gap in the middle of the deck)
+_hc = 24
+_c0 = _pv(0, 0, 0.0)
+_hr = [_pv(2 * math.pi * j / _hc, PLY_HUB, 0.0) for j in range(_hc + 1)]
+for j in range(_hc):
+    f = bm.faces.new((_c0, _hr[j], _hr[j + 1]))
+    for lp in f.loops:
+        lp[uvl].uv = ((lp.vert.co.x / PLY_R + 1) * 1.5, (lp.vert.co.y / PLY_R + 1) * 1.5)
+obj_from(bm, "Base", M_PLY)
+
+# ---------------------------------------------------------------- roof: canvas tilt over a rafter frame
+# EXPLICIT UVs on the rafters: wood02's grain runs along texture-U (measured), so map U to the batten
+# AXIS -> the grain runs down the length of each rafter, not across it. (No more auto-UV guesswork.)
+def rafter_box(bm, p0, p1, w, h, uvl, gtile=0.55, wtile=0.20):
+    p0, p1 = Vector(p0), Vector(p1); d = p1 - p0; dn = d.normalized()
+    side = dn.cross(Vector((0, 0, 1))); side = side.normalized() if side.length > 1e-6 else Vector((1, 0, 0))
+    sv, vv = side * (w / 2), side.cross(dn).normalized() * (h / 2)
+    pts = [p0 + sv * a + vv * b for a in (1, -1) for b in (1, -1)] + [p1 + sv * a + vv * b for a in (1, -1) for b in (1, -1)]
+    vs = [bm.verts.new(p) for p in pts]
+    for f in [(0, 1, 3, 2), (4, 6, 7, 5), (0, 2, 6, 4), (1, 5, 7, 3), (0, 4, 5, 1), (2, 3, 7, 6)]:
+        try: face = bm.faces.new([vs[i] for i in f])
+        except ValueError: continue
+        for lp in face.loops:
+            co = lp.vert.co
+            lp[uvl].uv = ((co - p0).dot(dn) / gtile, (co - p0).dot(side) / wtile)   # U along batten, V across
+bm = bmesh.new(); uvl = bm.loops.layers.uv.verify()
 HUB = 0.16
 for i in range(SIDES):                                   # rafters, eaves -> crown hub (exposed from below)
     e = corner(i, R + OVERHANG, EAVES_H - 0.02)
-    box(bm, e, (HUB * math.cos(ang(i)), HUB * math.sin(ang(i)), APEX_H - 0.10), 0.055, 0.085)
-obj_from(bm, "Rafters", M_TIMBER)
+    rafter_box(bm, e, (HUB * math.cos(ang(i)), HUB * math.sin(ang(i)), APEX_H - 0.10), 0.055, 0.085, uvl)
+# Rafters skinned in the table LEGS' wood (table.glb 'Painted wood' / wood02), knocked darker so the
+# roof frame overhead reads as the same timber as the table it sits over, just in shadow.
+def _rafter_mat():
+    DARK = 0.55
+    m = bpy.data.materials.new("rafter"); b = _bsdf(m)
+    col = np.clip(SCAN["wood02_diffuse"] * DARK, 0, 1)
+    rgh = np.clip(1.0 - SCAN["wood02_glossiness"][:, :, 0], 0.05, 1.0)   # glossiness -> roughness
+    orm = np.stack([np.ones_like(rgh), rgh, np.zeros_like(rgh)], -1)
+    tex_node(m, save(col, "rafter_col"), "Base Color"); orm_node(m, save(orm, "rafter_orm"))
+    nt = m.node_tree
+    ni = nt.nodes.new("ShaderNodeTexImage")
+    ni.image = bpy.data.images.load(save(SCAN["wood02_normal_opengl"], "rafter_nrm", jpeg=False))
+    ni.image.colorspace_settings.name = 'Non-Color'
+    nm = nt.nodes.new("ShaderNodeNormalMap")
+    nt.links.new(ni.outputs["Color"], nm.inputs["Color"]); nt.links.new(nm.outputs["Normal"], b.inputs["Normal"])
+    return m
+obj_from(bm, "Rafters", _rafter_mat())
 
 # Tilt: a grid PER BAY with shared verts, so it shades smoothly and can actually sag. Bays stay
 # unwelded from each other - the canvas creases over each rafter, which is what a real tent does.
@@ -909,33 +988,19 @@ def make_lamp():
     return me
 
 
-LAMP_K = (1.0, 0.72, 0.42)          # 2700K
 CAB_ME = make_lamp()
 UP = Vector((0, 0, 1))
 nb = 0
 
 
-def place_cab(pos, facing, own_light=0.0):
-    """Instance the shared lamp mesh, oriented along `facing`.
-
-    own_light > 0 puts a real point light INSIDE this bulb's orb, so it is genuinely a lit bulb rather
-    than one lit by a neighbour a few centimetres away. Shadowless and short-range: Godot's clustered
-    renderer takes many of those cheaply - it is shadow MAPS that don't scale."""
+def place_cab(pos, facing):
+    """Instance the shared lamp mesh, oriented along `facing`. Emissive orb ONLY — the GLB casts no
+    light (scene lighting is the manifest's job); these just glow + bloom under the engine's glow."""
     global nb
     o = bpy.data.objects.new(f"Lamp{nb}", CAB_ME)                # SHARED mesh data -> real instancing
     o.location = pos
     o.rotation_euler = UP.rotation_difference(facing.normalized()).to_euler()
     bpy.context.collection.objects.link(o)
-    if own_light > 0.0:
-        ld = bpy.data.lights.new(f"Fil{nb}", 'POINT')
-        ld.energy = own_light
-        ld.color = LAMP_K
-        ld.shadow_soft_size = CAB_D * 0.5
-        ld.use_custom_distance = True
-        ld.cutoff_distance = 1.1                                 # short range keeps clusters cheap
-        lo = bpy.data.objects.new(f"Fil{nb}", ld)
-        lo.location = pos + facing.normalized() * (CAB_D * 0.5)  # at the filament, inside the orb
-        bpy.context.collection.objects.link(lo)
     nb += 1
 
 
@@ -943,7 +1008,9 @@ def place_cab(pos, facing, own_light=0.0):
 # INSIDE face, firing inward over the counter. Not on the lampboard: that sits out at BULB_R, past the
 # pillars and clear of the beam entirely.
 LAMP_W    = 0.060                       # the bulb's envelope diameter
-LAMP_PITCH = max(CAB_PITCH, LAMP_W + 0.045)   # centres: 80mm is the CABOCHON spec; a bulb needs clearance
+# A sparse "few glowing" festoon around the top of the frame — NOT the dense 80mm cabochon run.
+# ~0.30m centres gives a handful per bay; raise for fewer, lower toward CAB_PITCH (0.08) for a full run.
+LAMP_PITCH = 0.30
 JOIN_CLEAR = POST / 2 + LAMP_W / 2 + 0.02     # keep clear of the pillar at each join
 for i in range(SIDES):
     a, b = corner(i, R, 0), corner(i + 1, R, 0)
@@ -957,21 +1024,10 @@ for i in range(SIDES):
         t = (JOIN_CLEAR + j * usable / n) / chord
         p = a.lerp(b, t)
         seat = Vector((p.x, p.y, EAVES_H)) - face_n * (BEAM_W / 2)   # ON the beam's inside face
-        place_cab(seat, -face_n, own_light=0.9)                      # its OWN light, in its own orb
-# Interior lamps under each rafter. INFERRED - the record is silent on stall interiors - but the player
-# sits under this roof, and an unlit tilt reads as a dark tent rather than a lit stall.
-for i in range(SIDES):
-    e = corner(i, R + OVERHANG, EAVES_H - 0.02)
-    hub = Vector((HUB * math.cos(ang(i)), HUB * math.sin(ang(i)), APEX_H - 0.10))
-    steps = max(2, int((hub - e).length / max(0.16, LAMP_PITCH)))
-    for j in range(1, steps):
-        p = e.lerp(hub, j / steps)
-        z = p.z - 0.043
-        # The rafter runs OUT to the eaves at BULB_R and DIPS below the beam ring on the way. No lamp
-        # goes on that stretch: outboard of the top rail it hangs below the frame, over the opening
-        # rather than under the roof. Only the inboard run - above the rail AND inside it - is lit.
-        if z < EAVES_H or math.hypot(p.x, p.y) > R: continue
-        place_cab(Vector((p.x, p.y, z)), Vector((0, 0, -1)))             # seated under the rafter
+        place_cab(seat, -face_n)                                     # emissive glow ONLY — no cast light.
+# The GLB casts NO light: bulbs are emissive orbs (they glow + bloom) but the ILLUMINATION comes from
+# the manifest lights, positioned to suggest neighbouring stalls. Omni bulb point lights used to flood
+# straight up past the roofline ("UFOs from above"); they're gone — scene lighting is the manifest's job.
 
 # scalloped valance: hangs under the lampboard. Reads as fairground from any distance, at any angle.
 bm = bmesh.new(); uvl = bm.loops.layers.uv.verify()
@@ -1018,47 +1074,9 @@ for i in range(seg):
         except ValueError: pass
 obj_from(bm, "Finial", M_GOLD, smooth=True)
 
-# ---------------------------------------------------------------- the ground it stands on
-# The stall carries its own tober. Extends past the eaves so it fills the view under the banners; UVs
-# are world-scaled (metres / GROUND_TILE) so the scan repeats rather than stretching across 6m.
-GROUND_R, GROUND_TILE = BULB_R + 1.4, 2.0    # the scan photographs ~2m of ground: tile at its real size
-GROUND_DISP, GROUND_GRID = 0.035, 110        # 35mm of relief; grid cells across the diameter
-
-# DISPLACED ground. glTF has no height/parallax slot and Godot's heightmap doesn't survive the import,
-# so relief has to be real geometry: a grid displaced by the scan's own Displacement map. 35mm is the
-# scale of trodden earth - ruts and clumps, not dunes. Tapered to flat at the rim so the silhouette
-# doesn't break against the backdrop, and under the stall's own footprint so the legs still seat.
-_disp = load_file(os.path.join(HERE, "ground_src", "Ground037_2K-JPG_Displacement.jpg"), 512, True)[:, :, 0]
-_dn = _disp.shape[0]
-
-
-def _ground_z(x, y):
-    uu = int(((x / GROUND_TILE) % 1.0) * (_dn - 1))
-    vv = int(((y / GROUND_TILE) % 1.0) * (_dn - 1))
-    r = math.hypot(x, y)
-    edge = min(1.0, max(0.0, (GROUND_R - r) / 1.2))           # flat at the rim
-    seat = min(1.0, max(0.0, (r - (R - 0.35)) / 0.5))         # flat under the stall's footprint
-    return (_disp[vv, uu] - 0.5) * 2.0 * GROUND_DISP * edge * seat
-
-
-bm = bmesh.new(); uvl = bm.loops.layers.uv.verify()
-step = (2 * GROUND_R) / GROUND_GRID
-grid = {}
-for iy in range(GROUND_GRID + 1):
-    for ix in range(GROUND_GRID + 1):
-        x = -GROUND_R + ix * step
-        y = -GROUND_R + iy * step
-        if math.hypot(x, y) > GROUND_R: continue
-        grid[(ix, iy)] = bm.verts.new((x, y, 0.004 + _ground_z(x, y)))
-for iy in range(GROUND_GRID):
-    for ix in range(GROUND_GRID):
-        q = [grid.get((ix, iy)), grid.get((ix + 1, iy)), grid.get((ix + 1, iy + 1)), grid.get((ix, iy + 1))]
-        if any(v is None for v in q): continue
-        f = bm.faces.new(q)
-        for lp in f.loops:
-            co = lp.vert.co
-            lp[uvl].uv = (co.x / GROUND_TILE, co.y / GROUND_TILE)
-obj_from(bm, "Ground", M_GROUND, smooth=True)
+# ---------------------------------------------------------------- ground
+# The stall no longer bakes its own tober. The engine's procedural plywood base_disk (manifest
+# `base_disk`) is the ground it stands on, so no ground mesh/material is built or exported here.
 
 # ---------------------------------------------------------------- fixings: rust only where galv is breached
 bm = bmesh.new()
@@ -1069,39 +1087,10 @@ for i in range(SIDES):
         box(bm, Vector((p.x, p.y, z)) + o * 0.01, Vector((p.x, p.y, z)) + o * 0.05, 0.022, 0.022)
 obj_from(bm, "Fixings", M_RUST)
 
-# ---------------------------------------------------------------- the ring actually emits light
-# An emissive material in Godot GLOWS but lights nothing: it is a bright surface, not a lamp. Without
-# these the interior is lit only by the scene rig and the bulbs read as white blobs stuck on a dark
-# stall. One lamp per bay rather than one per bulb - 310 point lights is not affordable, and at this
-# radius a single warm source per bay is indistinguishable from its 13 bulbs.
-_nlamp = 0
-
-
-def point_lamp(pos, energy):
-    """A real point light. Godot Forward+ is clustered, so shadowless point lights are cheap - but not
-    310 of them. One per few bulbs is indistinguishable at this radius and affordable."""
-    global _nlamp
-    ld = bpy.data.lights.new(f"Lamp{_nlamp}", 'POINT')
-    ld.energy = energy
-    ld.color = LAMP_K
-    ld.shadow_soft_size = 0.06
-    lo = bpy.data.objects.new(f"BayLamp{_nlamp}", ld)
-    lo.location = pos
-    bpy.context.collection.objects.link(lo)
-    _nlamp += 1
-
-
-# The wall ring needs no shared lamps: every ring bulb carries its own light (place_cab own_light).
-
-# The rafter banks. These had NO lights at all - 180 of the 310 bulbs were pure decoration, glowing
-# but lighting nothing, which is exactly why the roof stayed dark above the ring.
-for i in range(SIDES):
-    e = corner(i, R + OVERHANG, EAVES_H - 0.02)
-    hub = Vector((HUB * math.cos(ang(i)), HUB * math.sin(ang(i)), APEX_H - 0.10))
-    for t in (0.22, 0.50, 0.78):
-        p = e.lerp(hub, t)
-        if p.z - 0.05 < EAVES_H: continue          # nothing below the beam
-        point_lamp(Vector((p.x, p.y, p.z - 0.05)), 6.0)
+# ---------------------------------------------------------------- lighting is the manifest's job
+# The GLB emits NO light. Bulbs are emissive orbs (they glow + bloom) but cast nothing; the scene is
+# lit by the manifest lights, positioned to suggest neighbouring stalls — not by spots/floods/point
+# lights baked into the prop, which flooded up past the roofline.
 
 # ---------------------------------------------------------------- baked ambient occlusion
 # The engine's SSAO is tuned to the BOARD: SsaoRadius is 1.1cm, tightened deliberately so the seam
@@ -1197,7 +1186,7 @@ for o in bpy.data.objects:
 # The scan GLBs (coin, table) are imported ONLY to read their embedded textures; their meshes are
 # discarded immediately after. If that discard is ever lost, they export INSIDE this prop - which has
 # happened, silently, costing 25MB and 14k faces. This stall builds nothing but a stall: assert it.
-_EXPECTED = ("Banner", "Legs", "Rafters", "Tilt", "Crown", "Valance", "Lampboard", "Ground",
+_EXPECTED = ("Banner", "Legs", "MetalFeet", "Base", "Rafters", "Tilt", "Crown", "Valance", "Lampboard",
              "Signwriting", "Finial", "Fixings", "Lamp", "BayLamp", "Fil")
 _strays = [o.name for o in bpy.data.objects
            if o.type == 'MESH' and not any(o.name.startswith(e) for e in _EXPECTED)]

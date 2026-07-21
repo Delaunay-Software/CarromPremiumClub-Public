@@ -8,13 +8,45 @@
   "frame_material": "dark",
   "frame_finish": "piano_gloss",
   "grunge": {
-    "board": { "patina": 0, "grime": 0, "powder": 1.0, "wear": 0 },
-    "table": { "patina": 0, "grime": 0, "powder": 0, "wear": 0 },
-    "frame": { "wear": 0, "grime": 0, "powder": 0 }
+    "board": {
+      "patina": 0,
+      "grime": 0,
+      "powder": 1.0,
+      "wear": 0
+    },
+    "table": {
+      "patina": 0,
+      "grime": 0,
+      "powder": 0,
+      "wear": 0
+    },
+    "frame": {
+      "wear": 0,
+      "grime": 0,
+      "powder": 0
+    }
   },
   "markings": {
-    "line_color":       "#740005",
+    "line_color": "#740005",
     "spot_color": "#740005"
   },
-  "chair_yaw": 180
+  "chair_yaw": 180,
+  "backdrop_fx": {
+    "regions": [
+      {
+        "effect": "board_cam",
+        "zoom": 1,
+        "poly": [
+          0.598041,
+          0.39492512,
+          0.59787357,
+          0.36110315,
+          0.6192724,
+          0.36742783,
+          0.6195659,
+          0.39940232
+        ]
+      }
+    ]
+  }
 }

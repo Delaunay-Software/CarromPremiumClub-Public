@@ -3,20 +3,21 @@
   "title": "Funhouse",
   "tagline": "Smaller board, relaxed rules",
   "rule_set": "casual",
-  "accent": "#FF8C42",
+  "accent": "#ff8c42",
   "turn_marker": {
     "scale": 1.0,
     "offset_y": -93
   },
   "surface_material": "ivory",
+  "surface_roughness_scale": 0.1900000000023283,
   "frame_material": "rough",
   "board_size": "mini",
   "glass_top": false,
   "ground_plane": false,
   "lighting": {
-    "main_energy": 1.15,
-    "ambient_color": "#5A4E42",
-    "ambient_energy": 0.6,
+    "main_energy": 0.35,
+    "ambient_color": "#ffffff",
+    "ambient_energy": 0.03,
     "lights": [
       {
         "name": "Fair1",
@@ -26,7 +27,7 @@
           0
         ],
         "color": "#FDFFFD",
-        "energy": 1.4,
+        "energy": 0.5,
         "shadows": true
       },
       {
@@ -37,7 +38,7 @@
           0
         ],
         "color": "#FFFDE0",
-        "energy": 0.84,
+        "energy": 0.3,
         "shadows": true
       },
       {
@@ -48,7 +49,7 @@
           0
         ],
         "color": "#FCFFF2",
-        "energy": 0.79
+        "energy": 0.142
       },
       {
         "name": "Fair4",
@@ -58,7 +59,7 @@
           0
         ],
         "color": "#FFFEFD",
-        "energy": 0.65
+        "energy": 0.117
       },
       {
         "name": "Fair5",
@@ -68,7 +69,7 @@
           0
         ],
         "color": "#FFFEEC",
-        "energy": 0.63
+        "energy": 0.113
       },
       {
         "name": "Fair6",
@@ -78,7 +79,7 @@
           0
         ],
         "color": "#FFFDDE",
-        "energy": 0.59
+        "energy": 0.106
       },
       {
         "name": "Fair7",
@@ -88,7 +89,7 @@
           0
         ],
         "color": "#FFFEFB",
-        "energy": 0.57
+        "energy": 0.103
       }
     ]
   },
@@ -100,19 +101,27 @@
   "props": [
     {
       "mesh": "funfair_stall.glb",
+      "floor": true,
       "pos": [
-        -0.7,
-        -85,
-        -9.9
+        5.4,
+        0,
+        -4.3
       ],
       "yaw": 0,
-      "scale": 1
+      "scale": 0.58
     }
   ],
   "realism": {
     "fog": {
       "depth_begin": 560.0,
       "depth_end": 1400.0
+    },
+    "glow": {
+      "threshold": 0.85,
+      "scale": 1.4,
+      "intensity": 0.55,
+      "strength": 0.9,
+      "bloom": 0.0
     }
   },
   "grunge": {
@@ -123,6 +132,11 @@
       "wear": 1.0
     }
   },
-  "frame_finish": "satin",
-  "frame_tint": "#561409"
+  "frame_finish": "gloss",
+  "frame_tint": "#41211c",
+  "corner_cap_mesh": "outer_corner_cap.glb",
+  "corner_style": "rounded",
+  "corner_cap_material": "brass",
+  "corner_albedo_scale": 1.1000000000058208,
+  "table_height": 500
 }

@@ -8,9 +8,9 @@
   "environment": "cafe",
   "surface_material": "beech",
   "surface_roughness_scale": 0.72,
-  "frame_material": "beech",
+  "frame_material": "rough",
   "table_material": "rough",
-  "frame_finish": "satin",
+  "frame_finish": "gloss",
   "corner_style": "rounded",
   "corner_cap_mesh": "full_corner_cap.glb",
   "corner_cap_material_scale": 0.05,
@@ -35,23 +35,53 @@
       {
         "effect": "fire",
         "poly": [
-          0.47426027,
-          0.59737986,
-          0.48385426,
-          0.5861146,
-          0.47374848,
-          0.4970923,
-          0.5151149,
-          0.50359887,
-          0.5194834,
-          0.58639157,
-          0.52287644,
-          0.5999596
+          0.40365624,
+          0.5754176,
+          0.4049239,
+          0.5699151,
+          0.40470514,
+          0.54059386,
+          0.43087786,
+          0.53525585,
+          0.43011707,
+          0.56628156,
+          0.4319371,
+          0.5716104,
+          0.40577316,
+          0.5789355
+        ]
+      },
+      {
+        "effect": "candle",
+        "zoom": 1,
+        "poly": [
+          0.38845605,
+          0.4664499,
+          0.38770312,
+          0.44689617,
+          0.4064905,
+          0.4490204,
+          0.40709466,
+          0.4663463
+        ]
+      },
+      {
+        "effect": "candle",
+        "poly": [
+          0.44221032,
+          0.46912885,
+          0.44174778,
+          0.4528775,
+          0.45469332,
+          0.45424825,
+          0.45516756,
+          0.46984497
         ]
       }
     ]
   },
   "props": [],
-  "table_tint": "#443227",
-  "corner_cap_material": "brass"
+  "corner_cap_material": "brass",
+  "table_tint": "#362620",
+  "frame_tint": "#342020"
 }

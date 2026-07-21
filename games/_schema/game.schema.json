@@ -349,7 +349,29 @@
           "mesh":  { "type": "string", "description": "GLB filename, e.g. 'plant.glb'." },
           "pos":   { "type": "array", "items": { "type": "number" }, "minItems": 3, "maxItems": 3, "description": "[x, y, z] cm from the board centre; y = height above the floor." },
           "yaw":   { "type": "number", "description": "Yaw in degrees. Default 0." },
-          "scale": { "type": "number", "description": "Uniform scale multiplier. Default 1." }
+          "scale": { "type": "number", "description": "Uniform scale multiplier. Default 1." },
+          "base_disk": {
+            "type": "object", "additionalProperties": false,
+            "description": "Procedural flat plywood base disk under this prop: radially-arranged wedge panels. Absent → no disk.",
+            "properties": {
+              "wedges":       { "type": "integer", "description": "Panel count (3-48). Default 12." },
+              "material":     { "type": "string",  "description": "Wood species id under assets/textures/. Default 'ash'." },
+              "radius_scale": { "type": "number",  "description": "Disk radius as a multiple of the prop footprint (0.5-3). Default 1.1." },
+              "thickness":    { "type": "number",  "description": "Disk thickness in cm (0.5-20). Default 4." },
+              "tint":         { "type": "string",  "description": "Optional #RRGGBB that multiplies the wood albedo (e.g. dark grungy ply). Absent = the texture's own colour." }
+            }
+          },
+          "material_copy": {
+            "type": "array",
+            "description": "Reassign one node's surface-0 material FROM another node's, at load (e.g. pelmet ← canopy fabric).",
+            "items": {
+              "type": "object", "additionalProperties": false,
+              "properties": {
+                "from": { "type": "string", "description": "Source glTF node name." },
+                "to":   { "type": "string", "description": "Target glTF node name." }
+              }
+            }
+          }
         }
       }
     },
