@@ -7,7 +7,7 @@
     },
     "funhouse": {
       "tier": "flavour",
-      "files": 26
+      "files": 24
     },
     "funhouse-card": {
       "tier": "common",
@@ -27,7 +27,7 @@
     },
     "rainy_day_cafe": {
       "tier": "flavour",
-      "files": 8
+      "files": 10
     },
     "rainy_day_cafe-card": {
       "tier": "common",
@@ -43,7 +43,7 @@
     },
     "woodland_retreat": {
       "tier": "flavour",
-      "files": 5
+      "files": 6
     },
     "woodland_retreat-card": {
       "tier": "common",
